@@ -21,7 +21,7 @@
             <ImageView
                 android:layout_width="@dimen/navigation_icon"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="28dp"
                 android:src="@drawable/back" />
             <TextView
                 android:layout_width="wrap_content"
@@ -48,12 +48,13 @@
             android:textSize="@dimen/settings_list_font_size"
             android:thumb="@drawable/knob"
             android:track="@drawable/track"
-            tools:ignore="UseSwitchCompatOrMaterialXml" />
+            tools:ignore="UseSwitchCompatOrMaterialXml"
+            app:thumbTint="@color/light_gray"
+            app:trackTint="@color/track_light_gray"/>
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_button"
-
             android:fontFamily="sans-serif"
             android:backgroundTint="@color/white"
             android:gravity="start|center_vertical"
@@ -68,13 +69,11 @@
             app:icon="@drawable/share"
             app:iconTint="@color/light_gray"
             app:iconGravity="end"
-            app:iconSize="@dimen/settings_icon_size"
-            android:layout_gravity="start" />
+            app:iconSize="@dimen/settings_icon_size" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_button"
-
             android:fontFamily="sans-serif"
             android:backgroundTint="@color/white"
             android:gravity="start|center_vertical"
@@ -89,8 +88,7 @@
             app:icon="@drawable/group"
             app:iconTint="@color/light_gray"
             app:iconGravity="end"
-            app:iconSize="@dimen/settings_icon_size"
-            android:layout_gravity="start" />
+            app:iconSize="@dimen/settings_icon_size" />
 
         <Button
             android:layout_width="match_parent"
@@ -105,11 +103,11 @@
             android:letterSpacing="@dimen/settings_button_letter_spacing"
             android:textAllCaps="false"
             android:textColor="@color/dark_gray"
-            android:textSize="@dimen/settings_list_font_size"
-            app:icon="@drawable/vector"
+            android:textSize="@dimen/settings_list_font_size"app:icon="@drawable/vector"
             app:iconTint="@color/light_gray"
             app:iconGravity="end"
-            android:layout_gravity="start" />
+            app:iconSize="@dimen/settings_icon_size" />
+
 
     </LinearLayout>
 

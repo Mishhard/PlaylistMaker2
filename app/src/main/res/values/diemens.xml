@@ -10,6 +10,6 @@
     <dimen name="settings_button_padding_left">0dp</dimen>
     <dimen name="settings_button_padding_right">0dp</dimen>
     <dimen name="settings_button_letter_spacing">0</dimen>
-    <dimen name="settings_icon_size">18dp</dimen>
+    <dimen name="settings_icon_size">24dp</dimen>
 
 </resources>
