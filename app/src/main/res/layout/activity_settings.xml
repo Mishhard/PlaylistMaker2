@@ -7,7 +7,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
->
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             <ImageView
                 android:layout_width="@dimen/navigation_icon"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="16dp"
+                android:layout_marginEnd="28dp"
                 android:src="@drawable/back" />
             <TextView
                 android:layout_width="wrap_content"
@@ -49,24 +49,16 @@
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <Button
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             style="@style/SettingsButton"
             android:text="@string/share_app"
-            app:icon="@drawable/share"
-            app:iconSize="@dimen/settings_icon_size" />
+            app:icon="@drawable/share" />
 
         <Button
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             style="@style/SettingsButton"
             android:text="@string/support"
-            app:icon="@drawable/group"
-            app:iconSize="@dimen/settings_icon_size" />
+            app:icon="@drawable/group" />
 
         <Button
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
             style="@style/SettingsButton"
             android:text="@string/user_terms"
             app:icon="@drawable/vector" />
