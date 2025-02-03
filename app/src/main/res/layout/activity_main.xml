@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/light_blue"
+    android:background="?attr/mainBackgroundColor"
     style="@style/LinearLayout">
 
     <FrameLayout
@@ -29,24 +30,21 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/searchButton"
             android:text="@string/search"
             app:icon="@drawable/search"
             style="@style/MainButton" />
-
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/libraryButton"
             android:text="@string/media_library"
             app:icon="@drawable/library"
             style="@style/MainButton" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/settingsButton"
             android:text="@string/settings"
             app:icon="@drawable/settings"
             style="@style/MainButton" />
     </LinearLayout>
-
-
 </LinearLayout>
