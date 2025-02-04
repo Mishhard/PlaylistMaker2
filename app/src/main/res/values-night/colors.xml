@@ -2,4 +2,8 @@
 <resources>
     <color name="light_blue">#1A1B22</color>
     <color name="light_gray">#FFFFFF</color>
+    <color name="thumb_light_gray">#3772E7</color>
+    <color name="light_light_gray">#E6E8EB</color>
+    <color name="track_light_light_gray">#9FBBF3</color>
+    <color name="search_light_light_gray">#FFFFFF</color>
 </resources>
