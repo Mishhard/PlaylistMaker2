@@ -103,7 +103,8 @@
             android:letterSpacing="@dimen/settings_button_letter_spacing"
             android:textAllCaps="false"
             android:textColor="@color/dark_gray"
-            android:textSize="@dimen/settings_list_font_size"app:icon="@drawable/vector"
+            android:textSize="@dimen/settings_list_font_size"
+            app:icon="@drawable/vector"
             app:iconTint="@color/light_gray"
             app:iconGravity="end"
             app:iconSize="@dimen/settings_icon_size" />
