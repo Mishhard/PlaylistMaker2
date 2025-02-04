@@ -12,17 +12,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val searchButton = findViewById<Button>(R.id.searchButton)
+
         searchButton.setOnClickListener {
             val displayIntent = Intent(this, SearchActivity::class.java)
             startActivity(displayIntent)
         }
 
         val libraryButton = findViewById<Button>(R.id.libraryButton)
+
         libraryButton.setOnClickListener {
             val displayIntent = Intent(this, LibraryActivity::class.java)
             startActivity(displayIntent)
         }
         val settingsButton = findViewById<Button>(R.id.settingsButton)
+
+
         settingsButton.setOnClickListener {
             val displayIntent = Intent(this, SettingsActivity::class.java)
             startActivity(displayIntent)
