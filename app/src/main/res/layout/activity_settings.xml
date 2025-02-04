@@ -51,16 +51,19 @@
             android:track="@drawable/track"/>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/shareButton"
             style="@style/SettingsButton"
             android:text="@string/share_app"
             app:icon="@drawable/share" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/supportButton"
             style="@style/SettingsButton"
             android:text="@string/support"
             app:icon="@drawable/group" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/termsButton"
             style="@style/SettingsButton"
             android:text="@string/user_terms"
             app:icon="@drawable/vector" />
