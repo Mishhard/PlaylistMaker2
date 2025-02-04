@@ -7,6 +7,6 @@
     <string name="share_app">Share app</string>
     <string name="support">Support</string>
     <string name="user_terms">User terms</string>
-
+    <string name="clear_search_request">Clear</string>
 
 </resources>

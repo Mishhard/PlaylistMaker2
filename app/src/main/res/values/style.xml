@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="MainButton">
+    <style name="MainButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_marginBottom">@dimen/main_padding</item>
@@ -48,4 +48,16 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textColor">?attr/primaryTextColor</item>
     </style>
+
+    <style name="CursorTheme">
+        <item name="colorControlActivated">@color/search_light_blue</item>
+        <item name="colorAccent">@color/search_light_blue</item>
+    </style>
+
+    <style name="NoShadowButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="elevation">0dp</item>
+        <item name="strokeWidth">0dp</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
 </resources>

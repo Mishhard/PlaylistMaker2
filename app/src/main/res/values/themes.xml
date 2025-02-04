@@ -2,8 +2,9 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="mainBackgroundColor">@color/light_blue</item>
         <item name="settingsBackgroundColor">@color/white</item>
-
         <item name="primaryTextColor">@color/dark_gray</item>
         <item name="primaryIconTint">@color/dark_gray</item>
     </style>
+
+
 </resources>

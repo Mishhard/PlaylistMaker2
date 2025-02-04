@@ -12,4 +12,5 @@
     <string name="support_body" translatable="false">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="user_terms_url" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
     <string name="android_practicum_url" translatable="false">https://practicum.yandex.ru/android-developer/</string>
+    <string name="clear_search_request">Очистить</string>
 </resources>

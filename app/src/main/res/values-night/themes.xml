@@ -6,4 +6,6 @@
         <item name="primaryTextColor">@color/white</item>
         <item name="primaryIconTint">@color/white</item>
     </style>
+
+
 </resources>
