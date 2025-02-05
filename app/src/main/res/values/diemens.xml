@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="status_bar_height">24dp</dimen>
     <dimen name="window_title">22sp</dimen>
     <dimen name="settings_button">61dp</dimen>
     <dimen name="main_padding">16dp</dimen>

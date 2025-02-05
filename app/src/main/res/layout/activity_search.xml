@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
+    android:id="@+id/root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?attr/settingsBackgroundColor"
-    style="@style/LinearLayout">
+    style="@style/LinearLayout"
+    android:clipToPadding="false">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -78,17 +80,22 @@
             android:id="@+id/clearButton"
             android:backgroundTint="@color/search_light_light_gray"
             android:textColor="@color/search_light_gray"
-            android:text="@string/clear_search_request"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/textInputLayout"
             app:layout_constraintBottom_toBottomOf="@id/textInputLayout"
-            android:layout_marginEnd="12dp"
             android:visibility="gone"
             android:fontFamily="@font/ys_display_regular"
             style="@style/NoShadowButton"
-            />
+            app:icon="@drawable/close"
+            app:iconTint="@color/search_light_gray"
+            app:iconPadding="0dp"
+            app:iconGravity="end"
+            android:gravity="end"
+            android:paddingEnd="@dimen/icons_padding"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

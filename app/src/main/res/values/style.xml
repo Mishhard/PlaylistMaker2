@@ -22,6 +22,7 @@
         <item name="android:orientation">vertical</item>
         <item name="android:padding">@dimen/main_padding</item>
         <item name="android:background">?attr/mainBackgroundColor</item>
+        <item name="android:paddingTop">@dimen/status_bar_height</item>
     </style>
 
     <style name="SettingsButton">

@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import BaseActivity
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -10,14 +11,18 @@ import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import android.view.inputmethod.InputMethodManager
+import android.widget.LinearLayout
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : BaseActivity() {
 
     private var searchQuery: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+        val rootView = findViewById<LinearLayout>(R.id.root_view)
+        applyStatusBarPadding(rootView)
 
         val backButton: ImageView = findViewById(R.id.backButton)
         backButton.setOnClickListener {
