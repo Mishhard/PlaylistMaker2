@@ -49,8 +49,6 @@
             <TextView
                 android:id="@+id/tvArtistName"
                 style="@style/SearchTrackTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 app:layout_constraintBaseline_toBaselineOf="@id/ivSeparator"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -58,7 +56,6 @@
                 android:id="@+id/ivSeparator"
                 android:layout_width="@dimen/search_track_separator_size"
                 android:layout_height="@dimen/search_track_separator_size"
-                android:layout_marginHorizontal="4dp"
                 android:src="@drawable/track_separator"
                 app:layout_constraintStart_toEndOf="@id/tvArtistName"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -67,8 +64,6 @@
             <TextView
                 android:id="@+id/tvTrackTime"
                 style="@style/SearchTrackTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 app:layout_constraintBaseline_toBaselineOf="@id/ivSeparator"
                 app:layout_constraintStart_toEndOf="@id/ivSeparator" />
 
