@@ -1,6 +1,5 @@
 package com.example.playlistmaker
 
-import BaseActivity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -15,7 +14,7 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         val rootView = findViewById<LinearLayout>(R.id.root_view)
-        applyStatusBarPadding(rootView)
+        applySystemBarsPadding(rootView)
 
         val searchButton = findViewById<Button>(R.id.searchButton)
 
