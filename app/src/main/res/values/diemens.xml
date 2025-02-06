@@ -14,5 +14,6 @@
     <dimen name="settings_icon_size">24dp</dimen>
     <dimen name="radius_search">8dp</dimen>
     <dimen name="search_track_artist">11sp</dimen>
-
+    <dimen name="search_track_cover_size">45dp</dimen>
+    <dimen name="search_track_separator_size">13dp</dimen>
 </resources>
