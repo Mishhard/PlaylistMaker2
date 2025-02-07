@@ -1,6 +1,5 @@
 package com.example.playlistmaker
 
-import BaseActivity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
@@ -19,7 +18,7 @@ class SettingsActivity : BaseActivity() {
         setContentView(R.layout.activity_settings)
 
         val rootView = findViewById<LinearLayout>(R.id.root_view)
-        applyStatusBarPadding(rootView)
+        applySystemBarsPadding(rootView)
 
         val backButton: ImageView = findViewById(R.id.backButton)
         backButton.setOnClickListener {

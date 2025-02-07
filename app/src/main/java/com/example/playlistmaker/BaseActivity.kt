@@ -1,3 +1,5 @@
+package com.example.playlistmaker
+
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -14,17 +16,20 @@ abstract class BaseActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
-    protected fun applyStatusBarPadding(view: View) {
-        val statusBarHeight = resources.getDimensionPixelSize(
-            resources.getIdentifier("status_bar_height", "dimen", "android")
-        )
-        val mainPadding = resources.getDimensionPixelSize(R.dimen.main_padding)
+    protected fun applySystemBarsPadding(view: View) {
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
 
-        view.setPadding(
-            view.paddingLeft,
-            statusBarHeight + mainPadding,
-            view.paddingRight,
-            view.paddingBottom
-        )
+            val defaultPadding = resources.getDimensionPixelSize(R.dimen.main_padding)
+
+            v.setPadding(
+                systemBars.left + defaultPadding,
+                systemBars.top + defaultPadding,
+                systemBars.right + defaultPadding,
+                systemBars.bottom + defaultPadding
+            )
+
+            insets
+        }
     }
 }

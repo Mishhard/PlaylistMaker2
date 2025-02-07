@@ -61,4 +61,12 @@
         <item name="backgroundTint">@android:color/transparent</item>
     </style>
 
+    <style name="SearchTrackTextView">
+        <item name="android:textSize">@dimen/search_track_artist</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">@color/light_gray</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
 </resources>
