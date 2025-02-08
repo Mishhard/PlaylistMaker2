@@ -36,6 +36,8 @@
             android:textSize="@dimen/settings_list_font_size"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:maxLines="1"
+            android:ellipsize="end"
             />
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -50,7 +52,11 @@
                 android:id="@+id/tvArtistName"
                 style="@style/SearchTrackTextView"
                 app:layout_constraintBaseline_toBaselineOf="@id/ivSeparator"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/ivSeparator"
+                android:maxLines="1"
+                android:ellipsize="end"
+                />
 
             <ImageView
                 android:id="@+id/ivSeparator"
@@ -65,7 +71,9 @@
                 android:id="@+id/tvTrackTime"
                 style="@style/SearchTrackTextView"
                 app:layout_constraintBaseline_toBaselineOf="@id/ivSeparator"
-                app:layout_constraintStart_toEndOf="@id/ivSeparator" />
+                app:layout_constraintStart_toEndOf="@id/ivSeparator"
+                android:maxLines="1"
+                android:ellipsize="end"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

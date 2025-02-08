@@ -13,4 +13,7 @@
     <string name="user_terms_url" translatable="false">https://yandex.ru/legal/practicum_offer/</string>
     <string name="android_practicum_url" translatable="false">https://practicum.yandex.ru/android-developer/</string>
     <string name="clear_search_request">Очистить</string>
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="connection_problem">Проблемы со связью\n\nЗагрузка не удалась. Проверьте\nподключение к интернету</string>
+    <string name="retry">Обновить</string>
 </resources>

@@ -19,7 +19,8 @@ class MainActivity : BaseActivity() {
         val searchButton = findViewById<Button>(R.id.searchButton)
 
         searchButton.setOnClickListener {
-            val displayIntent = Intent(this, SearchActivity::class.java)
+            val displayIntent = Intent(this,
+                SearchActivity::class.java)
             startActivity(displayIntent)
         }
 
