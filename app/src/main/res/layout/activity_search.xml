@@ -49,8 +49,7 @@
             app:boxCornerRadiusTopStart="@dimen/radius_search"
             app:boxCornerRadiusTopEnd="@dimen/radius_search"
             app:boxCornerRadiusBottomStart="@dimen/radius_search"
-            app:boxCornerRadiusBottomEnd="@dimen/radius_search"
-            app:boxBackgroundMode="filled"
+            app:boxCornerRadiusBottomEnd="@dimen/radius_search"            app:boxBackgroundMode="filled"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
             app:boxStrokeColor="@android:color/transparent"
@@ -113,8 +112,8 @@
 
         <ImageView
             android:id="@+id/placeholderImage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="@dimen/search_placeholder_size"
+            android:layout_height="@dimen/search_placeholder_size"
             android:layout_marginBottom="16dp"/>
 
         <TextView
@@ -131,14 +130,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:backgroundTint="@color/dark_gray"
+            android:backgroundTint="?attr/primaryIconTint"
             android:fontFamily="@font/ys_display_medium"
             android:letterSpacing="@dimen/settings_button_letter_spacing"
+            android:textColor="?attr/settingsBackgroundColor"
             android:text="@string/retry"
             android:textAllCaps="false"
             android:textSize="14sp"
             android:visibility="gone"
-            app:cornerRadius="54px" />
+            app:cornerRadius="54dp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

@@ -49,6 +49,6 @@ dependencies {
     implementation(libs.material.v161)
     implementation(libs.glide)
     kapt(libs.glide.compiler)
-    implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.retrofit)
 }

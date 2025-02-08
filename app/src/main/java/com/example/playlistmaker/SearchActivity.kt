@@ -11,10 +11,8 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -87,7 +85,13 @@ class SearchActivity : BaseActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = if (s.isNullOrEmpty()) View.GONE else View.VISIBLE
+
+                    if (s.isNullOrEmpty())
+                    {
+                        clearButton.visibility = View.GONE
+                        clearTracksList()
+                    }
+                    else clearButton.visibility = View.VISIBLE
             }
 
             override fun afterTextChanged(s: android.text.Editable?) {}
