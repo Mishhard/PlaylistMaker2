@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import RetrofitClient
 import TracksAdapter
 import android.content.Context
 import android.os.Bundle
@@ -18,15 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : BaseActivity() {
 
-    private val itunesBaseUrl = "https://itunes.apple.com"
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val itunesService = retrofit.create(ItunesApi::class.java)
-
     private lateinit var queryInput: EditText
     private lateinit var placeholderMessage: TextView
     private lateinit var placeholderContainer: View
@@ -34,6 +26,8 @@ class SearchActivity : BaseActivity() {
     private lateinit var tracksList: RecyclerView
     private lateinit var clearButton: View
     private lateinit var retryButton: Button
+    private lateinit var backButton: ImageView
+
 
     private val tracks = ArrayList<Track>()
     private val adapter = TracksAdapter()
@@ -52,6 +46,7 @@ class SearchActivity : BaseActivity() {
         tracksList = findViewById(R.id.rvTracks)
         clearButton = findViewById(R.id.clearButton)
         retryButton = findViewById(R.id.retryButton)
+        backButton = findViewById(R.id.backButton)
 
         adapter.tracks = tracks
         tracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
@@ -71,7 +66,9 @@ class SearchActivity : BaseActivity() {
             }
         }
 
-
+        backButton.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
         clearButton.setOnClickListener {
             queryInput.setText("")
             clearButton.visibility = View.GONE
@@ -102,7 +99,7 @@ class SearchActivity : BaseActivity() {
         val query = queryInput.text.toString().trim()
 
 
-        itunesService.search(query).enqueue(object : Callback<SearchResponse> {
+        RetrofitClient.instance.search(query).enqueue(object : Callback<SearchResponse> {
             override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
                 if (response.isSuccessful) {
                     tracks.clear()
