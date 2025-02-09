@@ -7,8 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
-import com.example.playlistmaker.R
+import androidx.appcompat.widget.SwitchCompat
 
 class SettingsActivity : BaseActivity() {
 
@@ -19,6 +18,13 @@ class SettingsActivity : BaseActivity() {
 
         val rootView = findViewById<LinearLayout>(R.id.root_view)
         applySystemBarsPadding(rootView)
+
+        val themeSwitcher = findViewById<SwitchCompat>(R.id.themeSwitcher)
+        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
 
         val backButton: ImageView = findViewById(R.id.backButton)
         backButton.setOnClickListener {

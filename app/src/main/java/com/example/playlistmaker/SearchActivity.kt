@@ -27,10 +27,13 @@ class SearchActivity : BaseActivity() {
     private lateinit var clearButton: View
     private lateinit var retryButton: Button
     private lateinit var backButton: ImageView
-
+    private lateinit var searchHistoryContainer: LinearLayout
+    private lateinit var clearHistoryButton: Button
 
     private val tracks = ArrayList<Track>()
     private val adapter = TracksAdapter()
+    private val historyAdapter = TracksAdapter()
+    private lateinit var searchHistory: SearchHistory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +41,8 @@ class SearchActivity : BaseActivity() {
 
         val rootView = findViewById<LinearLayout>(R.id.root_view)
         applySystemBarsPadding(rootView)
+
+        searchHistory = SearchHistory(this)
 
         placeholderContainer = findViewById(R.id.placeholderContainer)
         placeholderImage = findViewById(R.id.placeholderImage)
@@ -47,12 +52,21 @@ class SearchActivity : BaseActivity() {
         clearButton = findViewById(R.id.clearButton)
         retryButton = findViewById(R.id.retryButton)
         backButton = findViewById(R.id.backButton)
+        searchHistoryContainer = findViewById(R.id.searchHistoryContainer)
+        clearHistoryButton = findViewById(R.id.clearHistoryButton)
 
         adapter.tracks = tracks
         tracksList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         tracksList.adapter = adapter
 
+        historyAdapter.tracks = searchHistory.loadHistory()
+        val historyRecyclerView = findViewById<RecyclerView>(R.id.historyRecyclerView)
+        historyRecyclerView.layoutManager = LinearLayoutManager(this)
+        historyRecyclerView.adapter = historyAdapter
+
         setupListeners()
+
+        loadSearchHistory()
     }
 
     private fun setupListeners() {
@@ -77,7 +91,13 @@ class SearchActivity : BaseActivity() {
         retryButton.setOnClickListener {
             performSearch()
         }
-
+        queryInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus && queryInput.text.isEmpty()) {
+                showSearchHistory()
+            } else {
+                hideSearchHistory()
+            }
+        }
         queryInput.addTextChangedListener(object : android.text.TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -87,12 +107,29 @@ class SearchActivity : BaseActivity() {
                     {
                         clearButton.visibility = View.GONE
                         clearTracksList()
+                        if (queryInput.hasFocus()) {
+                            showSearchHistory()
+                        } else {
+                            hideSearchHistory()
+                        }
                     }
-                    else clearButton.visibility = View.VISIBLE
+                    else {
+                        clearButton.visibility = View.VISIBLE
+                        hideSearchHistory()
+                    }
             }
 
             override fun afterTextChanged(s: android.text.Editable?) {}
         })
+        adapter.setOnItemClickListener { track ->
+            searchHistory.addTrack(track)
+            loadSearchHistory()
+        }
+
+        clearHistoryButton.setOnClickListener {
+            searchHistory.clearHistory()
+            loadSearchHistory()
+        }
     }
 
     private fun performSearch() {
@@ -124,6 +161,25 @@ class SearchActivity : BaseActivity() {
         })
     }
 
+    private fun loadSearchHistory() {
+        val history = searchHistory.loadHistory()
+        if (history.isNotEmpty()) {
+            historyAdapter.tracks = history
+            historyAdapter.notifyDataSetChanged()
+        } else {
+            searchHistoryContainer.visibility = View.GONE
+        }
+    }
+
+    private fun showSearchHistory() {
+        if (searchHistory.loadHistory().isNotEmpty()) {
+            searchHistoryContainer.visibility = View.VISIBLE
+        }
+    }
+
+    private fun hideSearchHistory() {
+        searchHistoryContainer.visibility = View.GONE
+    }
 
     private fun showMessage(message: String, showPlaceholder: Boolean, isError: Boolean = false) {
         if (showPlaceholder) {
