@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.*
@@ -27,7 +28,7 @@ class SearchActivity : BaseActivity() {
     private lateinit var clearButton: View
     private lateinit var retryButton: Button
     private lateinit var backButton: ImageView
-    private lateinit var searchHistoryContainer: LinearLayout
+    private lateinit var searchHistoryContainer: ConstraintLayout
     private lateinit var clearHistoryButton: Button
 
     private val tracks = ArrayList<Track>()
