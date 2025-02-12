@@ -3,8 +3,10 @@ package com.example.playlistmaker
 import RetrofitClient
 import TracksAdapter
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.WindowInsetsAnimation
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
@@ -15,8 +17,10 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import retrofit2.*
-import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.Serializable
 
 class SearchActivity : BaseActivity() {
 
@@ -104,20 +108,18 @@ class SearchActivity : BaseActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
 
-                    if (s.isNullOrEmpty())
-                    {
-                        clearButton.visibility = View.GONE
-                        clearTracksList()
-                        if (queryInput.hasFocus()) {
-                            showSearchHistory()
-                        } else {
-                            hideSearchHistory()
-                        }
-                    }
-                    else {
-                        clearButton.visibility = View.VISIBLE
+                if (s.isNullOrEmpty()) {
+                    clearButton.visibility = View.GONE
+                    clearTracksList()
+                    if (queryInput.hasFocus()) {
+                        showSearchHistory()
+                    } else {
                         hideSearchHistory()
                     }
+                } else {
+                    clearButton.visibility = View.VISIBLE
+                    hideSearchHistory()
+                }
             }
 
             override fun afterTextChanged(s: android.text.Editable?) {}
@@ -125,10 +127,12 @@ class SearchActivity : BaseActivity() {
         adapter.setOnItemClickListener { track ->
             searchHistory.addTrack(track)
             loadSearchHistory()
+            openPlayer(track)
         }
         historyAdapter.setOnItemClickListener { track ->
             searchHistory.addTrack(track)
             loadSearchHistory()
+            openPlayer(track)
         }
 
         clearHistoryButton.setOnClickListener {
@@ -141,8 +145,12 @@ class SearchActivity : BaseActivity() {
         val query = queryInput.text.toString().trim()
 
 
-        RetrofitClient.instance.search(query).enqueue(object : Callback<SearchResponse> {
-            override fun onResponse(call: Call<SearchResponse>, response: Response<SearchResponse>) {
+        RetrofitClient.instance.search(query).enqueue(object :
+            Callback<SearchResponse> {
+            override fun onResponse(
+                call: Call<SearchResponse>,
+                response: Response<SearchResponse>
+            ) {
                 if (response.isSuccessful) {
                     tracks.clear()
                     response.body()?.results?.let {
@@ -213,9 +221,18 @@ class SearchActivity : BaseActivity() {
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(queryInput.windowToken, 0)
     }
+
     private fun clearTracksList() {
         tracks.clear()
         adapter.notifyDataSetChanged()
         showMessage("", false)
     }
+
+    private fun openPlayer(track: Track) {
+        val intent = Intent(this, PlayerActivity::class.java).apply {
+            putExtra("track", track as Serializable)
+        }
+        startActivity(intent)
+    }
+
 }
