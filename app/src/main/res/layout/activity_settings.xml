@@ -41,6 +41,7 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/themeSwitcher"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_button"
             android:backgroundTint="?attr/mainBackgroundColor"
