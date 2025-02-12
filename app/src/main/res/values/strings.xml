@@ -18,4 +18,9 @@
     <string name="retry">Обновить</string>
     <string name="clear_history">Очистить историю</string>
     <string name="you_searched">Вы искали</string>
+    <string name="Country">Страна</string>
+    <string name="Genre">Жанр</string>
+    <string name="Year">Год</string>
+    <string name="Album">Альбом</string>
+    <string name="Duration">Длительность</string>
 </resources>
