@@ -126,6 +126,10 @@ class SearchActivity : BaseActivity() {
             searchHistory.addTrack(track)
             loadSearchHistory()
         }
+        historyAdapter.setOnItemClickListener { track ->
+            searchHistory.addTrack(track)
+            loadSearchHistory()
+        }
 
         clearHistoryButton.setOnClickListener {
             searchHistory.clearHistory()
