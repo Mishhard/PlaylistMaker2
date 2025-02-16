@@ -6,7 +6,8 @@
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="PlayerActivity">
+    tools:context="PlayerActivity"
+    android:background="?attr/settingsBackgroundColor">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -145,6 +146,8 @@
             android:scrollHorizontally="true"
             android:singleLine="true"
             app:layout_constraintTop_toTopOf="@id/album_label"
+            app:layout_constraintStart_toEndOf="@id/album_label"
+            android:layout_width="0dp"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
