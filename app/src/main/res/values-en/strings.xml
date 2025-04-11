@@ -13,5 +13,10 @@
     <string name="retry">Retry</string>
     <string name="clear_history">Clear history</string>
     <string name="you_searched">You searched</string>
+    <string name="Country">Страна</string>
+    <string name="Genre">Жанр</string>
+    <string name="Year">Год</string>
+    <string name="Album">Альбом</string>
+    <string name="Duration">Длительность</string>
 
 </resources>
