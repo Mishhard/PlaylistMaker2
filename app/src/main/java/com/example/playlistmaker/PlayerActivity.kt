@@ -48,11 +48,12 @@ class PlayerActivity : BaseActivity() {
         val rootView = findViewById<ScrollView>(R.id.root_view)
         applySystemBarsPadding(rootView)
 
+        track = intent.getSerializableExtra("track") as? Track ?: return
+
         val backButton: ImageView = findViewById(R.id.back_button)
         val trackCover: ImageView = findViewById(R.id.track_cover)
         val trackName: TextView = findViewById(R.id.track_name)
         val artistName: TextView = findViewById(R.id.artist_name)
-        val timer: TextView = findViewById(R.id.timer)
         val albumName: TextView = findViewById(R.id.album_value)
         val releaseYear: TextView = findViewById(R.id.year_value)
         val genre: TextView = findViewById(R.id.genre_value)
@@ -67,7 +68,6 @@ class PlayerActivity : BaseActivity() {
             playbackControl()
         }
 
-        track = intent.getSerializableExtra("track") as? Track ?: return
 
         Glide.with(this)
             .load(track.getFullCover())
