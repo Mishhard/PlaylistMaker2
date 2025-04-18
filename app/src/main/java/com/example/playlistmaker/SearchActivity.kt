@@ -27,6 +27,7 @@ import java.io.Serializable
 
 class SearchActivity : BaseActivity() {
 
+    private lateinit var progressBar: ProgressBar
     private lateinit var queryInput: EditText
     private lateinit var placeholderMessage: TextView
     private lateinit var placeholderContainer: View
@@ -52,6 +53,7 @@ class SearchActivity : BaseActivity() {
 
         searchHistory = SearchHistory(this)
 
+        progressBar = findViewById<ProgressBar>(R.id.progressBar)
         placeholderContainer = findViewById(R.id.placeholderContainer)
         placeholderImage = findViewById(R.id.placeholderImage)
         placeholderMessage = findViewById(R.id.placeholderMessage)
@@ -76,6 +78,12 @@ class SearchActivity : BaseActivity() {
 
         loadSearchHistory()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+    }
+
 
     private fun setupListeners() {
         queryInput.setOnEditorActionListener { _, actionId, _ ->
@@ -153,7 +161,8 @@ class SearchActivity : BaseActivity() {
 
     private fun performSearch() {
         val query = queryInput.text.toString().trim()
-        findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+        hideContent()
+        progressBar.visibility = View.VISIBLE
 
         RetrofitClient.instance.search(query).enqueue(object :
             Callback<SearchResponse> {
@@ -206,7 +215,13 @@ class SearchActivity : BaseActivity() {
         searchHistoryContainer.visibility = View.GONE
     }
 
-    private fun showMessage(message: String, showPlaceholder: Boolean, isError: Boolean = false) {
+    private fun hideContent() {
+        placeholderContainer.visibility = View.GONE
+        tracksList.visibility = View.GONE
+        retryButton.visibility = View.GONE
+    }
+
+        private fun showMessage(message: String, showPlaceholder: Boolean, isError: Boolean = false) {
         if (showPlaceholder) {
             placeholderContainer.visibility = View.VISIBLE
             placeholderMessage.text = message
@@ -222,9 +237,8 @@ class SearchActivity : BaseActivity() {
                 retryButton.visibility = View.GONE
             }
         } else {
-            placeholderContainer.visibility = View.GONE
+            hideContent()
             tracksList.visibility = View.VISIBLE
-            retryButton.visibility = View.GONE
         }
     }
 
@@ -242,7 +256,7 @@ class SearchActivity : BaseActivity() {
 
     private fun openPlayer(track: Track) {
         val intent = Intent(this, PlayerActivity::class.java).apply {
-            putExtra("track", track as Serializable)
+            putExtra("track", track)
         }
         startActivity(intent)
     }

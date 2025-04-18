@@ -25,19 +25,22 @@ class PlayerActivity : BaseActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private val handler = Handler(Looper.getMainLooper())
     private var playerState = STATE_DEFAULT
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     companion object {
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
+        private const val UPDATE_INTERVAL = 300L
+
     }
 
     private val updateTimerRunnable = object : Runnable {
         override fun run() {
             val position = mediaPlayer?.currentPosition ?: 0
-            timer.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(position)
-            handler.postDelayed(this, 300)
+            timer.text = dateFormat.format(position)
+            handler.postDelayed(this, UPDATE_INTERVAL)
         }
     }
 
@@ -48,7 +51,7 @@ class PlayerActivity : BaseActivity() {
         val rootView = findViewById<ScrollView>(R.id.root_view)
         applySystemBarsPadding(rootView)
 
-        track = intent.getSerializableExtra("track") as? Track ?: return
+        track = intent.getParcelableExtra("track") as? Track ?: return
 
         val backButton: ImageView = findViewById(R.id.back_button)
         val trackCover: ImageView = findViewById(R.id.track_cover)
@@ -119,7 +122,7 @@ class PlayerActivity : BaseActivity() {
             setOnCompletionListener {
                 playButton.setImageResource(R.drawable.play)
                 playerState = STATE_PREPARED
-                timer.text = "00:00"
+                timer.text = dateFormat.format(0)
                 handler.removeCallbacks(updateTimerRunnable)
             }
         }

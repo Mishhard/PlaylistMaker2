@@ -1,9 +1,11 @@
 package com.example.playlistmaker
 
-import java.io.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@Parcelize
 data class Track(
     val trackName: String,
     val artistName: String,
@@ -15,7 +17,7 @@ data class Track(
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String,
-    ) : Serializable {
+    ) : Parcelable {
     fun getFormattedTime(): String {
         return if (trackTimeMillis != null) {
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
