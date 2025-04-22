@@ -25,9 +25,9 @@ abstract class BaseActivity : AppCompatActivity() {
             val defaultPadding = resources.getDimensionPixelSize(R.dimen.main_padding)
 
             v.setPadding(
-                currentPaddingLeft,
+                systemBars.left + defaultPadding,
                 systemBars.top + defaultPadding,
-                currentPaddingRight,
+                systemBars.right + defaultPadding,
                 systemBars.bottom + defaultPadding
             )
 
