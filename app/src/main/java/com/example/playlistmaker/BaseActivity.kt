@@ -19,8 +19,6 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun applySystemBarsPadding(view: View) {
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val currentPaddingLeft = v.paddingLeft
-            val currentPaddingRight = v.paddingRight
 
             val defaultPadding = resources.getDimensionPixelSize(R.dimen.main_padding)
 
