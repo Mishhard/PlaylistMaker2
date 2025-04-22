@@ -14,6 +14,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
+import androidx.constraintlayout.widget.ConstraintLayout
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -48,8 +49,8 @@ class PlayerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        val rootView = findViewById<ScrollView>(R.id.root_view)
-        applySystemBarsPadding(rootView)
+        val constraintRoot = findViewById<ConstraintLayout>(R.id.constraintRoot)
+        applySystemBarsPadding(constraintRoot)
 
         track = intent.getParcelableExtra("track") as? Track ?: return
 
