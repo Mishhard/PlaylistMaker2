@@ -15,6 +15,8 @@ import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -50,7 +52,11 @@ class PlayerActivity : BaseActivity() {
         setContentView(R.layout.activity_player)
 
         val constraintRoot = findViewById<ConstraintLayout>(R.id.constraintRoot)
-        applySystemBarsPadding(constraintRoot)
+        ViewCompat.setOnApplyWindowInsetsListener(constraintRoot) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, systemBars.top, 0, systemBars.bottom)
+            insets
+        }
 
         track = intent.getParcelableExtra("track") as? Track ?: return
 

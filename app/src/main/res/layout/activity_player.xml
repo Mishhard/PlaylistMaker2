@@ -9,7 +9,7 @@
     android:background="?attr/settingsBackgroundColor"
     tools:context="PlayerActivity"
     android:clipToPadding="false"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
