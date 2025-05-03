@@ -5,6 +5,8 @@ import TracksAdapter
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowInsetsAnimation
 import android.view.inputmethod.EditorInfo
@@ -13,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +27,7 @@ import java.io.Serializable
 
 class SearchActivity : BaseActivity() {
 
+    private lateinit var progressBar: ProgressBar
     private lateinit var queryInput: EditText
     private lateinit var placeholderMessage: TextView
     private lateinit var placeholderContainer: View
@@ -49,6 +53,7 @@ class SearchActivity : BaseActivity() {
 
         searchHistory = SearchHistory(this)
 
+        progressBar = findViewById<ProgressBar>(R.id.progressBar)
         placeholderContainer = findViewById(R.id.placeholderContainer)
         placeholderImage = findViewById(R.id.placeholderImage)
         placeholderMessage = findViewById(R.id.placeholderMessage)
@@ -73,6 +78,12 @@ class SearchActivity : BaseActivity() {
 
         loadSearchHistory()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+    }
+
 
     private fun setupListeners() {
         queryInput.setOnEditorActionListener { _, actionId, _ ->
@@ -116,23 +127,30 @@ class SearchActivity : BaseActivity() {
                     } else {
                         hideSearchHistory()
                     }
+                    handler.removeCallbacks(searchRunnable)
                 } else {
                     clearButton.visibility = View.VISIBLE
                     hideSearchHistory()
+                    searchDebounce()
                 }
             }
 
             override fun afterTextChanged(s: android.text.Editable?) {}
         })
         adapter.setOnItemClickListener { track ->
-            searchHistory.addTrack(track)
-            loadSearchHistory()
-            openPlayer(track)
+            if (clickDebounce()) {
+                searchHistory.addTrack(track)
+                loadSearchHistory()
+                openPlayer(track)
+            }
         }
+
         historyAdapter.setOnItemClickListener { track ->
-            searchHistory.addTrack(track)
-            loadSearchHistory()
-            openPlayer(track)
+            if (clickDebounce()) {
+                searchHistory.addTrack(track)
+                loadSearchHistory()
+                openPlayer(track)
+            }
         }
 
         clearHistoryButton.setOnClickListener {
@@ -143,7 +161,8 @@ class SearchActivity : BaseActivity() {
 
     private fun performSearch() {
         val query = queryInput.text.toString().trim()
-
+        hideContent()
+        progressBar.visibility = View.VISIBLE
 
         RetrofitClient.instance.search(query).enqueue(object :
             Callback<SearchResponse> {
@@ -151,6 +170,7 @@ class SearchActivity : BaseActivity() {
                 call: Call<SearchResponse>,
                 response: Response<SearchResponse>
             ) {
+                findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
                 if (response.isSuccessful) {
                     tracks.clear()
                     response.body()?.results?.let {
@@ -169,6 +189,7 @@ class SearchActivity : BaseActivity() {
             }
 
             override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
+                findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
                 showMessage(getString(R.string.connection_problem), true, isError = true)
             }
         })
@@ -194,7 +215,13 @@ class SearchActivity : BaseActivity() {
         searchHistoryContainer.visibility = View.GONE
     }
 
-    private fun showMessage(message: String, showPlaceholder: Boolean, isError: Boolean = false) {
+    private fun hideContent() {
+        placeholderContainer.visibility = View.GONE
+        tracksList.visibility = View.GONE
+        retryButton.visibility = View.GONE
+    }
+
+        private fun showMessage(message: String, showPlaceholder: Boolean, isError: Boolean = false) {
         if (showPlaceholder) {
             placeholderContainer.visibility = View.VISIBLE
             placeholderMessage.text = message
@@ -210,9 +237,8 @@ class SearchActivity : BaseActivity() {
                 retryButton.visibility = View.GONE
             }
         } else {
-            placeholderContainer.visibility = View.GONE
+            hideContent()
             tracksList.visibility = View.VISIBLE
-            retryButton.visibility = View.GONE
         }
     }
 
@@ -230,9 +256,32 @@ class SearchActivity : BaseActivity() {
 
     private fun openPlayer(track: Track) {
         val intent = Intent(this, PlayerActivity::class.java).apply {
-            putExtra("track", track as Serializable)
+            putExtra("track", track)
         }
         startActivity(intent)
+    }
+
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+    }
+
+    private val handler = Handler(Looper.getMainLooper())
+    private var isClickAllowed = true
+    private val searchRunnable = Runnable { performSearch() }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun clickDebounce(): Boolean {
+        val allowed = isClickAllowed
+        if (allowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return allowed
     }
 
 }
