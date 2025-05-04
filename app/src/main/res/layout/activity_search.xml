@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/root_view"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="?attr/settingsBackgroundColor"
+    android:id="@+id/root_view"
     style="@style/LinearLayout"
+    android:background="?attr/settingsBackgroundColor"
     android:clipToPadding="false"
     android:orientation="vertical">
 
@@ -24,16 +23,16 @@
                 android:layout_width="@dimen/navigation_icon"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="28dp"
-                android:src="@drawable/back"
                 android:maxLines="1"
+                android:src="@drawable/back"
                 app:tint="?attr/primaryIconTint" />
 
             <TextView
+                style="@style/TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/search"
-                android:textColor="?attr/primaryTextColor"
-                style="@style/TextView" />
+                android:textColor="?attr/primaryTextColor" />
         </LinearLayout>
 
     </FrameLayout>
@@ -47,60 +46,60 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@color/search_light_light_gray"
-            app:boxCornerRadiusTopStart="@dimen/radius_search"
-            app:boxCornerRadiusTopEnd="@dimen/radius_search"
-            app:boxCornerRadiusBottomStart="@dimen/radius_search"
-            app:boxCornerRadiusBottomEnd="@dimen/radius_search"
             app:boxBackgroundMode="filled"
+            app:boxCornerRadiusBottomEnd="@dimen/radius_search"
+            app:boxCornerRadiusBottomStart="@dimen/radius_search"
+            app:boxCornerRadiusTopEnd="@dimen/radius_search"
+            app:boxCornerRadiusTopStart="@dimen/radius_search"
+            app:boxStrokeColor="@android:color/transparent"
             app:boxStrokeWidth="0dp"
             app:boxStrokeWidthFocused="0dp"
-            app:boxStrokeColor="@android:color/transparent"
             app:hintEnabled="false"
-            app:theme="@style/CursorTheme"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:theme="@style/CursorTheme">
 
             <EditText
                 android:id="@+id/searchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/search"
-                android:lines="1"
-                android:maxLength="33"
-                android:inputType="text"
-                android:textSize="@dimen/settings_list_font_size"
-                android:textColor="@color/dark_gray"
-                android:textColorHint="@color/search_light_gray"
+                android:background="@drawable/edittext_background"
                 android:drawableStart="@drawable/search_icon"
                 android:drawablePadding="@dimen/icons_padding"
-                android:paddingStart="12dp"
-                android:padding="8dp"
-                android:background="@drawable/edittext_background"
-                android:textCursorDrawable="@drawable/cursor"
+                android:hint="@string/search"
                 android:imeOptions="actionDone"
-                android:singleLine="true"/>
+                android:inputType="text"
+                android:lines="1"
+                android:maxLength="33"
+                android:padding="8dp"
+                android:paddingStart="12dp"
+                android:singleLine="true"
+                android:textColor="@color/dark_gray"
+                android:textColorHint="@color/search_light_gray"
+                android:textCursorDrawable="@drawable/cursor"
+                android:textSize="@dimen/settings_list_font_size" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/clearButton"
-            android:backgroundTint="@color/search_light_light_gray"
-            android:textColor="@color/search_light_gray"
+            style="@style/NoShadowButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textInputLayout"
-            app:layout_constraintBottom_toBottomOf="@id/textInputLayout"
-            android:visibility="gone"
+            android:backgroundTint="@color/search_light_light_gray"
             android:fontFamily="@font/ys_display_regular"
-            style="@style/NoShadowButton"
-            app:icon="@drawable/close"
-            app:iconTint="@color/search_light_gray"
-            app:iconPadding="0dp"
-            app:iconGravity="end"
             android:gravity="end"
-            android:paddingEnd="@dimen/icons_padding" />
+            android:paddingEnd="@dimen/icons_padding"
+            android:textColor="@color/search_light_gray"
+            android:visibility="gone"
+            app:icon="@drawable/close"
+            app:iconGravity="end"
+            app:iconPadding="0dp"
+            app:iconTint="@color/search_light_gray"
+            app:layout_constraintBottom_toBottomOf="@id/textInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textInputLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -110,44 +109,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginTop="176dp"
         android:indeterminateTint="@color/search_light_blue"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="176dp"
         app:layout_constraintTop_toBottomOf="parent" />
 
     <LinearLayout
         android:id="@+id/placeholderContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:visibility="gone"
         android:layout_marginTop="110dp"
-        android:padding="0dp">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/placeholderImage"
             android:layout_width="@dimen/search_placeholder_size"
             android:layout_height="@dimen/search_placeholder_size"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <TextView
             android:id="@+id/placeholderMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="19sp"
             android:fontFamily="@font/ys_display_medium"
-            android:textColor="?attr/primaryTextColor"/>
+            android:gravity="center"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="19sp" />
 
         <Button
             android:id="@+id/retryButton"
             style="@style/SearchButtonStyle"
-            android:text="@string/retry"
             android:layout_marginTop="@dimen/search_margin_top"
+            android:text="@string/retry"
             android:visibility="gone" />
     </LinearLayout>
 
@@ -155,52 +154,52 @@
         android:id="@+id/rvTracks"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/search_margin_top"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_track"
-        android:layout_marginTop="@dimen/search_margin_top"/>
+        tools:listitem="@layout/item_track" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/searchHistoryContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
         android:layout_marginTop="50dp"
-        android:paddingBottom="16dp">
+        android:paddingBottom="16dp"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/you_searched"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_medium"
             android:gravity="center"
             android:text="@string/you_searched"
-            android:textSize="19sp"
-            android:fontFamily="@font/ys_display_medium"
             android:textColor="?attr/primaryTextColor"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="19sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/historyRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            tools:listitem="@layout/item_track"
             android:layout_marginTop="20dp"
-            app:layout_constraintTop_toBottomOf="@id/you_searched"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/clearHistoryButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/clearHistoryButton"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/you_searched"
+            tools:listitem="@layout/item_track" />
 
         <Button
             android:id="@+id/clearHistoryButton"
             style="@style/SearchButtonStyle"
-            android:text="@string/clear_history"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/search_margin_top"
-            app:layout_constraintTop_toBottomOf="@id/historyRecyclerView"
+            android:text="@string/clear_history"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/historyRecyclerView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.settings
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -7,7 +7,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import com.example.playlistmaker.presentation.ui.BaseActivity
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Settings
+import com.example.playlistmaker.presentation.Creator
 
 class SettingsActivity : BaseActivity() {
 
@@ -19,11 +24,25 @@ class SettingsActivity : BaseActivity() {
         val rootView = findViewById<LinearLayout>(R.id.root_view)
         applySystemBarsPadding(rootView)
 
+        Creator.init(this)
+
+        // Инициализация интеракторов
+        val getSettings = Creator.getSettingsInteractor
+        val saveSettings = Creator.saveSettingsInteractor
+
+        // Настройка переключателя темы
         val themeSwitcher = findViewById<SwitchCompat>(R.id.themeSwitcher)
-        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        val current = getSettings.execute()
+        themeSwitcher.isChecked = current.darkThemeEnabled
 
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as App).switchTheme(checked)
+            // Сохранение настроек
+            saveSettings.execute(Settings(darkThemeEnabled = checked))
+            // Применение режима темы
+            AppCompatDelegate.setDefaultNightMode(
+                if (checked) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+            )
         }
 
         val backButton: ImageView = findViewById(R.id.backButton)
