@@ -7,15 +7,16 @@ import com.example.playlistmaker.player.domain.api.PlayerInteractor
 class PlayerInteractorImpl : PlayerInteractor {
     private var mediaPlayer: MediaPlayer? = null
 
-    override fun prepare(previewUrl: String, onPrepared: () -> Unit) {
+    override fun prepare(url: String, onPrepared: () -> Unit) {
         mediaPlayer = MediaPlayer().apply {
-            setDataSource(previewUrl)
-            prepareAsync()
+            setDataSource(url)
             setOnPreparedListener {
                 onPrepared()
             }
+            prepareAsync()
         }
     }
+
     override fun play() {
         mediaPlayer?.start()
     }

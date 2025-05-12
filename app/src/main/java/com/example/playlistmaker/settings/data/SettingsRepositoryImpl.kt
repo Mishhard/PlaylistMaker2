@@ -2,7 +2,7 @@ package com.example.playlistmaker.settings.data
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.example.playlistmaker.settings.domain.SettingsRepository
+import com.example.playlistmaker.settings.domain.api.SettingsRepository
 import com.example.playlistmaker.domain.models.Settings
 import com.example.playlistmaker.PLAYLISTMAKER_PREFERENCES
 import com.example.playlistmaker.APP_THEME_KEY
@@ -14,7 +14,7 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
     override fun getSettings(): Settings =
         Settings(darkThemeEnabled = prefs.getBoolean(APP_THEME_KEY, false))
 
-    override fun saveSettings(settings: Settings) {
-        prefs.edit().putBoolean(APP_THEME_KEY, settings.darkThemeEnabled).apply()
+    override fun saveSettings(enabled: Boolean) {
+        prefs.edit().putBoolean(APP_THEME_KEY, enabled).apply()
     }
 }

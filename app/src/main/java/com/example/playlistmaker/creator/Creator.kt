@@ -9,9 +9,9 @@ import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
 import com.example.playlistmaker.data.repository.TrackRepositoryImpl
 import com.example.playlistmaker.search.domain.api.ClearSearchHistoryInteractor
 import com.example.playlistmaker.search.domain.api.GetSearchHistoryInteractor
-import com.example.playlistmaker.settings.domain.GetSettingsInteractor
+import com.example.playlistmaker.settings.domain.api.GetSettingsInteractor
 import com.example.playlistmaker.search.domain.api.SaveSearchTermInteractor
-import com.example.playlistmaker.settings.domain.SaveSettingsInteractor
+import com.example.playlistmaker.settings.domain.api.SaveSettingsInteractor
 import com.example.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.impl.GetSearchHistoryInteractorImpl
 import com.example.playlistmaker.domain.impl.GetSettingsInteractorImpl
