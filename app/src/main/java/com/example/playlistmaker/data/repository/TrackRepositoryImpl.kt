@@ -1,11 +1,11 @@
 package com.example.playlistmaker.data.repository
 
-import com.example.playlistmaker.data.network.ItunesApi
-import com.example.playlistmaker.data.SearchHistory
-import com.example.playlistmaker.data.dto.SearchResponse
-import com.example.playlistmaker.data.dto.TrackDto
+import com.example.playlistmaker.search.data.network.ItunesApi
+import com.example.playlistmaker.search.data.repository.SearchHistory
+import com.example.playlistmaker.search.data.dto.SearchResponse
+import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.domain.api.TrackRepository
+import com.example.playlistmaker.search.domain.api.TrackRepository
 
 class TrackRepositoryImpl(
     private val api: ItunesApi,

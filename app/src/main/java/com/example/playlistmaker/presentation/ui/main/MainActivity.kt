@@ -6,8 +6,8 @@ import android.widget.Button
 import android.widget.LinearLayout
 import com.example.playlistmaker.presentation.ui.BaseActivity
 import com.example.playlistmaker.R
-import com.example.playlistmaker.presentation.ui.search.SearchActivity
-import com.example.playlistmaker.presentation.ui.settings.SettingsActivity
+import com.example.playlistmaker.search.ui.SearchActivity
+import com.example.playlistmaker.settings.ui.SettingsActivity
 import com.example.playlistmaker.presentation.ui.library.LibraryActivity
 
 class MainActivity : BaseActivity() {
