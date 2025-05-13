@@ -1,4 +1,3 @@
-// presentation/ui/TracksAdapter.kt
 package com.example.playlistmaker.common
 
 import android.view.ViewGroup

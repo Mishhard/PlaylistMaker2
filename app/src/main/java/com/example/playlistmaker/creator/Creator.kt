@@ -3,6 +3,8 @@ package com.example.playlistmaker.creator
 
 import android.app.Application
 import android.content.Context
+import com.example.playlistmaker.player.domain.api.PlayerInteractor
+import com.example.playlistmaker.player.domain.impl.PlayerInteractorImpl
 import com.example.playlistmaker.search.data.network.ItunesApi
 import com.example.playlistmaker.search.data.network.RetrofitClient
 import com.example.playlistmaker.search.data.repository.SearchHistory
@@ -20,6 +22,8 @@ import com.example.playlistmaker.search.domain.impl.SaveSearchTermUseCaseImpl
 import com.example.playlistmaker.settings.domain.impl.SaveSettingsInteractorImpl
 import com.example.playlistmaker.search.domain.impl.SearchTracksInteractorImpl
 import com.example.playlistmaker.search.domain.impl.ClearSearchHistoryUseCaseImpl
+import com.example.playlistmaker.player.data.impl.MediaPlayerWrapperImpl
+import com.example.playlistmaker.player.data.MediaPlayerWrapper
 
 
 object Creator {
@@ -45,7 +49,6 @@ object Creator {
         TrackRepositoryImpl(api, historyStorage)
     }
 
-    // Use-cases for tracks
     val searchUseCase: SearchTracksInteractor by lazy {
         SearchTracksInteractorImpl(trackRepo)
     }
@@ -59,11 +62,14 @@ object Creator {
     val clearSearchHistoryInteractor: ClearSearchHistoryUseCase by lazy {
         ClearSearchHistoryUseCaseImpl(trackRepo)
     }
-    // Use-cases for settings
     val getSettingsInteractor: GetSettingsInteractor by lazy {
         GetSettingsInteractorImpl(settingsStorage)
     }
     val saveSettingsInteractor: SaveSettingsInteractor by lazy {
         SaveSettingsInteractorImpl(settingsStorage)
+    }
+    private val playerWrapper by lazy { MediaPlayerWrapperImpl() }
+    val playerInteractor: PlayerInteractor by lazy {
+        PlayerInteractorImpl(playerWrapper)
     }
 }

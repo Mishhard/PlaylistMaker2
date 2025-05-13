@@ -1,5 +1,6 @@
 package com.example.playlistmaker.player.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,13 +12,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.BaseActivity
-import com.example.playlistmaker.player.data.impl.PlayerInteractorImpl
-import com.example.playlistmaker.player.domain.models.Track
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.player.ui.models.TrackUiModel
 
 class PlayerActivity : BaseActivity() {
 
     private val vm: PlayerViewModel by viewModels {
-        PlayerViewModel.provideFactory(PlayerInteractorImpl())
+        PlayerViewModel.provideFactory(Creator.playerInteractor)
     }
 
     private lateinit var ivCover: ImageView
@@ -29,7 +30,14 @@ class PlayerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        val track = intent.getParcelableExtra<Track>("track") ?: return
+        val uiModel: TrackUiModel? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra("track", TrackUiModel::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra<TrackUiModel>("track")
+        }
+
+        val track = uiModel?.toDomain() ?: return
 
         ivCover = findViewById(R.id.track_cover)
         ivPlay  = findViewById(R.id.play)

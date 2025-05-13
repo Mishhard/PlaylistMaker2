@@ -27,9 +27,7 @@ class PlayerViewModel(
         _state.value = PlayerState.Loading
         interactor.prepare(
             url,
-            onPrepared = {
-                _state.postValue(PlayerState.Prepared)
-            },
+            onPrepared = { _state.postValue(PlayerState.Prepared) },
             onCompletion = {
                 posJob?.cancel()
                 _position.postValue(0)
@@ -44,8 +42,7 @@ class PlayerViewModel(
         posJob = viewModelScope.launch {
             while (isActive) {
                 delay(300)
-                val p = interactor.getCurrentPosition()
-                _position.postValue(p)
+                _position.postValue(interactor.getCurrentPosition())
             }
         }
     }
@@ -62,11 +59,6 @@ class PlayerViewModel(
     }
 
     fun isPlaying(): Boolean = interactor.isPlaying()
-
-    override fun onCleared() {
-        super.onCleared()
-        release()
-    }
 
     companion object {
         fun provideFactory(interactor: PlayerInteractor) =

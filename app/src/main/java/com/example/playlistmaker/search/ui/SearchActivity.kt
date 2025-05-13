@@ -21,6 +21,9 @@ import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.common.BaseActivity
 import com.example.playlistmaker.common.TracksAdapter
 import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.player.ui.models.TrackUiModel
+import com.example.playlistmaker.player.domain.models.Track as DomainTrack
+
 
 class SearchActivity : BaseActivity() {
 
@@ -137,9 +140,10 @@ class SearchActivity : BaseActivity() {
         }
     }
 
-    private fun openPlayer(track: Track) {
+    private fun openPlayer(domainTrack: DomainTrack) {
+        val uiModel = TrackUiModel.fromDomain(domainTrack)
         startActivity(Intent(this, PlayerActivity::class.java).apply {
-            putExtra("track", track)
+            putExtra("track", uiModel)
         })
     }
 
