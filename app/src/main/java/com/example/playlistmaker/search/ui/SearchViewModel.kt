@@ -1,7 +1,8 @@
+// SearchViewModel.kt
 package com.example.playlistmaker.search.ui
 
 import androidx.lifecycle.*
-import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.search.domain.api.ClearSearchHistoryInteractor
 import com.example.playlistmaker.search.domain.api.GetSearchHistoryInteractor
 import com.example.playlistmaker.search.domain.api.SaveSearchTermInteractor
@@ -44,12 +45,21 @@ class SearchViewModel(
             if (results.isEmpty()) {
                 _state.postValue(SearchState.Empty("Ничего не найдено"))
             } else {
-                saveTermInteractor.execute(results.first())
                 _state.postValue(SearchState.Content(results))
             }
         } catch (e: Throwable) {
             _state.postValue(SearchState.Error("Ошибка сети"))
         }
+    }
+
+    fun onTrackClicked(track: Track) {
+        saveTermInteractor.execute(track)
+        val history = historyInteractor.execute()
+        _state.value = SearchState.History(history)
+    }
+
+    fun saveTrack(track: Track) {
+        saveTermInteractor.execute(track)
     }
 
     fun loadHistory() {

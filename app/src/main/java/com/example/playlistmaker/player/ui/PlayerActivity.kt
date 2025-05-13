@@ -11,8 +11,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.presentation.ui.BaseActivity
+import com.example.playlistmaker.player.domain.models.Track
+import com.example.playlistmaker.common.BaseActivity
 import com.example.playlistmaker.player.domain.impl.PlayerInteractorImpl
 
 class PlayerActivity : BaseActivity() {
@@ -56,14 +56,14 @@ class PlayerActivity : BaseActivity() {
         }
 
         ivPlay.setOnClickListener {
-            when (viewModel.state.value) {
-                is PlayerState.Playing -> viewModel.pause()
-                is PlayerState.Prepared, is PlayerState.Paused -> viewModel.play()
-                else -> { /* ничего */ }
+            if (viewModel.isPlaying()) {
+                viewModel.pause()
+            } else {
+                viewModel.play()
             }
         }
 
-        // Кнопка Назад
+
         ivBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }

@@ -3,23 +3,22 @@ package com.example.playlistmaker.search.ui
 import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
+import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Button
-import android.view.View
 import androidx.activity.viewModels
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.player.ui.PlayerActivity
-import com.example.playlistmaker.presentation.ui.BaseActivity
-import com.example.playlistmaker.presentation.ui.TracksAdapter
+import com.example.playlistmaker.common.BaseActivity
+import com.example.playlistmaker.common.TracksAdapter
 import com.example.playlistmaker.creator.Creator
 
 class SearchActivity : BaseActivity() {
@@ -33,15 +32,22 @@ class SearchActivity : BaseActivity() {
     private lateinit var rvTracks: RecyclerView
     private lateinit var rvHistory: RecyclerView
     private lateinit var etQuery: EditText
-    private lateinit var btnClearHistory: Button
     private lateinit var clearButton: View
+    private lateinit var btnClearHistory: Button
     private lateinit var backButton: ImageView
+    private lateinit var historyContainer: View
 
     private val resultsAdapter = TracksAdapter().apply {
-        setOnItemClickListener { track -> openPlayer(track) }
+        setOnItemClickListener { track ->
+            viewModel.saveTrack(track)
+            openPlayer(track)
+        }
     }
     private val historyAdapter = TracksAdapter().apply {
-        setOnItemClickListener { track -> openPlayer(track) }
+        setOnItemClickListener { track ->
+            viewModel.onTrackClicked(track)
+            openPlayer(track)
+        }
     }
 
     private val viewModel: SearchViewModel by viewModels {
@@ -73,9 +79,10 @@ class SearchActivity : BaseActivity() {
         retryButton = findViewById(R.id.retryButton)
         rvTracks = findViewById(R.id.rvTracks)
         rvHistory = findViewById(R.id.historyRecyclerView)
+        historyContainer = findViewById(R.id.searchHistoryContainer)
         etQuery = findViewById(R.id.searchEditText)
-        btnClearHistory = findViewById(R.id.clearHistoryButton)
         clearButton = findViewById(R.id.clearButton)
+        btnClearHistory = findViewById(R.id.clearHistoryButton)
         backButton = findViewById(R.id.backButton)
     }
 
@@ -90,15 +97,17 @@ class SearchActivity : BaseActivity() {
     private fun setupBindings() {
         viewModel.state.observe(this) { state ->
             when (state) {
-                is SearchState.Loading -> showLoading()
-                is SearchState.Content -> showResults(state.tracks)
-                is SearchState.Empty   -> showEmpty(state.message)
-                is SearchState.History -> showHistory(state.tracks)
-                is SearchState.Error   -> showError(state.message)
+                is SearchState.Loading  -> showLoading()
+                is SearchState.Content  -> showResults(state.tracks)
+                is SearchState.Empty    -> showEmpty(state.message)
+                is SearchState.History  -> showHistory(state.tracks)
+                is SearchState.Error    -> showError(state.message)
             }
         }
 
         etQuery.doOnTextChanged { text, _, _, _ ->
+            clearButton.visibility =
+                if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
             viewModel.onQueryChanged(text.toString())
         }
 
@@ -113,6 +122,7 @@ class SearchActivity : BaseActivity() {
             etQuery.setText("")
             resultsAdapter.tracks.clear()
             resultsAdapter.notifyDataSetChanged()
+            viewModel.onQueryChanged("")
         }
 
         retryButton.setOnClickListener {
@@ -138,13 +148,13 @@ class SearchActivity : BaseActivity() {
         progressBar.visibility = View.VISIBLE
         placeholderContainer.visibility = View.GONE
         rvTracks.visibility = View.GONE
-        rvHistory.visibility = View.GONE
+        historyContainer.visibility = View.GONE
     }
 
     private fun showResults(list: List<Track>) {
         progressBar.visibility = View.GONE
         placeholderContainer.visibility = View.GONE
-        rvHistory.visibility = View.GONE
+        historyContainer.visibility = View.GONE
         rvTracks.visibility = View.VISIBLE
         resultsAdapter.tracks = ArrayList(list)
         resultsAdapter.notifyDataSetChanged()
@@ -154,6 +164,7 @@ class SearchActivity : BaseActivity() {
         progressBar.visibility = View.GONE
         placeholderContainer.visibility = View.GONE
         rvTracks.visibility = View.GONE
+        historyContainer.visibility = if (list.isEmpty()) View.GONE else View.VISIBLE
         rvHistory.visibility = View.VISIBLE
         historyAdapter.tracks = ArrayList(list)
         historyAdapter.notifyDataSetChanged()
@@ -161,19 +172,23 @@ class SearchActivity : BaseActivity() {
 
     private fun showEmpty(message: String) {
         progressBar.visibility = View.GONE
-        placeholderContainer.visibility = View.VISIBLE
-        placeholderMessage.text = message
+        historyContainer.visibility = View.GONE
         rvTracks.visibility = View.GONE
-        rvHistory.visibility = View.GONE
+        placeholderContainer.visibility = View.VISIBLE
+
+        placeholderImage.setImageResource(R.drawable.track_nothing_found)
+        placeholderMessage.text = message
         retryButton.visibility = View.GONE
     }
 
     private fun showError(message: String) {
         progressBar.visibility = View.GONE
-        placeholderContainer.visibility = View.VISIBLE
-        placeholderMessage.text = message
+        historyContainer.visibility = View.GONE
         rvTracks.visibility = View.GONE
-        rvHistory.visibility = View.GONE
+        placeholderContainer.visibility = View.VISIBLE
+
+        placeholderImage.setImageResource(R.drawable.track_connection_problem)
+        placeholderMessage.text = message
         retryButton.visibility = View.VISIBLE
     }
 }

@@ -9,9 +9,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.activity.viewModels
-import androidx.lifecycle.observe
 import com.example.playlistmaker.R
-import com.example.playlistmaker.presentation.ui.BaseActivity
+import com.example.playlistmaker.common.BaseActivity
 import com.example.playlistmaker.creator.Creator
 
 class SettingsActivity : BaseActivity() {

@@ -11,4 +11,6 @@ interface PlayerInteractor {
     fun release()
 
     fun getCurrentPosition(): Int
+
+    fun isPlaying(): Boolean
 }

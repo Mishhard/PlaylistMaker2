@@ -31,4 +31,7 @@ class PlayerInteractorImpl : PlayerInteractor {
     }
 
     override fun getCurrentPosition(): Int = mediaPlayer?.currentPosition ?: 0
+
+    override fun isPlaying(): Boolean = mediaPlayer?.isPlaying ?: false
+
 }

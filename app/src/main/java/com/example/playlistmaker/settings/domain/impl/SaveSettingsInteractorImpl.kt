@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.impl
+package com.example.playlistmaker.settings.domain.impl
 
 import com.example.playlistmaker.settings.domain.api.SaveSettingsInteractor
 import com.example.playlistmaker.settings.domain.api.SettingsRepository

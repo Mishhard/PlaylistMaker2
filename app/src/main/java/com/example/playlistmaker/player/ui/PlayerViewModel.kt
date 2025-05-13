@@ -34,6 +34,8 @@ class PlayerViewModel(
         playerInteractor.release()
     }
 
+    fun isPlaying(): Boolean = playerInteractor.isPlaying()
+
     private fun startPositionUpdates() {
         viewModelScope.launch {
             while (true) {

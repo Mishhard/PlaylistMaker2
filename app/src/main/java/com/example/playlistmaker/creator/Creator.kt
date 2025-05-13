@@ -6,7 +6,7 @@ import com.example.playlistmaker.search.data.network.ItunesApi
 import com.example.playlistmaker.search.data.network.RetrofitClient
 import com.example.playlistmaker.search.data.repository.SearchHistory
 import com.example.playlistmaker.settings.data.SettingsRepositoryImpl
-import com.example.playlistmaker.data.repository.TrackRepositoryImpl
+import com.example.playlistmaker.search.data.repository.TrackRepositoryImpl
 import com.example.playlistmaker.search.domain.api.ClearSearchHistoryInteractor
 import com.example.playlistmaker.search.domain.api.GetSearchHistoryInteractor
 import com.example.playlistmaker.settings.domain.api.GetSettingsInteractor
@@ -14,9 +14,9 @@ import com.example.playlistmaker.search.domain.api.SaveSearchTermInteractor
 import com.example.playlistmaker.settings.domain.api.SaveSettingsInteractor
 import com.example.playlistmaker.search.domain.api.SearchTracksInteractor
 import com.example.playlistmaker.search.domain.impl.GetSearchHistoryInteractorImpl
-import com.example.playlistmaker.domain.impl.GetSettingsInteractorImpl
+import com.example.playlistmaker.settings.domain.impl.GetSettingsInteractorImpl
 import com.example.playlistmaker.search.domain.impl.SaveSearchTermInteractorImpl
-import com.example.playlistmaker.domain.impl.SaveSettingsInteractorImpl
+import com.example.playlistmaker.settings.domain.impl.SaveSettingsInteractorImpl
 import com.example.playlistmaker.search.domain.impl.SearchTracksInteractorImpl
 import com.example.playlistmaker.search.domain.impl.ClearSearchHistoryInteractorImpl
 

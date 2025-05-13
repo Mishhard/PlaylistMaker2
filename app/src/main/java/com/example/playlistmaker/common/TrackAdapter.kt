@@ -1,9 +1,9 @@
 // presentation/ui/TracksAdapter.kt
-package com.example.playlistmaker.presentation.ui
+package com.example.playlistmaker.common
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.player.domain.models.Track
 
 class TracksAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
