@@ -11,6 +11,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -62,7 +63,6 @@ class SearchActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        Creator.init(this)
 
         rootView = findViewById(R.id.root_view)
         applySystemBarsPadding(rootView)
@@ -106,8 +106,7 @@ class SearchActivity : BaseActivity() {
         }
 
         etQuery.doOnTextChanged { text, _, _, _ ->
-            clearButton.visibility =
-                if (text.isNullOrEmpty()) View.GONE else View.VISIBLE
+            clearButton.isVisible = !text.isNullOrEmpty()
             viewModel.onQueryChanged(text.toString())
         }
 

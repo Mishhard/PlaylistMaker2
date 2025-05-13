@@ -1,17 +1,21 @@
-package com.example.playlistmaker.player.domain.impl
+package com.example.playlistmaker.player.data.impl
 
 import android.media.MediaPlayer
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 
-
 class PlayerInteractorImpl : PlayerInteractor {
     private var mediaPlayer: MediaPlayer? = null
 
-    override fun prepare(url: String, onPrepared: () -> Unit) {
+    override fun prepare(
+        url: String,
+        onPrepared: () -> Unit,
+        onCompletion: () -> Unit
+    ) {
         mediaPlayer = MediaPlayer().apply {
             setDataSource(url)
-            setOnPreparedListener {
-                onPrepared()
+            setOnPreparedListener { onPrepared() }
+            setOnCompletionListener {
+                onCompletion()
             }
             prepareAsync()
         }
@@ -30,8 +34,9 @@ class PlayerInteractorImpl : PlayerInteractor {
         mediaPlayer = null
     }
 
-    override fun getCurrentPosition(): Int = mediaPlayer?.currentPosition ?: 0
+    override fun getCurrentPosition(): Int =
+        mediaPlayer?.currentPosition ?: 0
 
-    override fun isPlaying(): Boolean = mediaPlayer?.isPlaying ?: false
-
+    override fun isPlaying(): Boolean =
+        mediaPlayer?.isPlaying ?: false
 }

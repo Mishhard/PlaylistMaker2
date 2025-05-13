@@ -1,11 +1,15 @@
 // SearchViewModel.kt
 package com.example.playlistmaker.search.ui
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.models.Track
-import com.example.playlistmaker.search.domain.api.ClearSearchHistoryInteractor
-import com.example.playlistmaker.search.domain.api.GetSearchHistoryInteractor
-import com.example.playlistmaker.search.domain.api.SaveSearchTermInteractor
+import com.example.playlistmaker.search.domain.api.ClearSearchHistoryUseCase
+import com.example.playlistmaker.search.domain.api.GetSearchHistoryUseCase
+import com.example.playlistmaker.search.domain.api.SaveSearchTermUseCase
 import com.example.playlistmaker.search.domain.api.SearchTracksInteractor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -13,9 +17,9 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(
     private val searchInteractor: SearchTracksInteractor,
-    private val historyInteractor: GetSearchHistoryInteractor,
-    private val saveTermInteractor: SaveSearchTermInteractor,
-    private val clearHistoryInteractor: ClearSearchHistoryInteractor
+    private val historyInteractor: GetSearchHistoryUseCase,
+    private val saveTermInteractor: SaveSearchTermUseCase,
+    private val clearHistoryInteractor: ClearSearchHistoryUseCase
 ) : ViewModel() {
 
     private val _state = MutableLiveData<SearchState>()
@@ -75,9 +79,9 @@ class SearchViewModel(
     companion object {
         fun provideFactory(
             searchInteractor: SearchTracksInteractor,
-            historyInteractor: GetSearchHistoryInteractor,
-            saveTermInteractor: SaveSearchTermInteractor,
-            clearHistoryInteractor: ClearSearchHistoryInteractor
+            historyInteractor: GetSearchHistoryUseCase,
+            saveTermInteractor: SaveSearchTermUseCase,
+            clearHistoryInteractor: ClearSearchHistoryUseCase
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel> create(modelClass: Class<T>): T {

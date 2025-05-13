@@ -1,11 +1,13 @@
 package com.example.playlistmaker.search.domain.impl
 
-import com.example.playlistmaker.search.domain.api.GetSearchHistoryInteractor
+import com.example.playlistmaker.search.domain.api.SaveSearchTermUseCase
 import com.example.playlistmaker.search.domain.api.TrackRepository
 import com.example.playlistmaker.player.domain.models.Track
 
-class GetSearchHistoryInteractorImpl(
+class SaveSearchTermUseCaseImpl(
     private val repo: TrackRepository
-) : GetSearchHistoryInteractor {
-    override fun execute(): List<Track> = repo.getSearchHistory()
+) : SaveSearchTermUseCase {
+    override fun execute(track: Track) {
+        repo.saveSearchTerm(track)
+    }
 }

@@ -1,10 +1,10 @@
 package com.example.playlistmaker.search.domain.impl
 
-import com.example.playlistmaker.search.domain.api.ClearSearchHistoryInteractor
+import com.example.playlistmaker.search.domain.api.ClearSearchHistoryUseCase
 import com.example.playlistmaker.search.domain.api.TrackRepository
 
-class ClearSearchHistoryInteractorImpl(
+class ClearSearchHistoryUseCaseImpl(
     private val repo: TrackRepository
-) : ClearSearchHistoryInteractor {
+) : ClearSearchHistoryUseCase {
     override fun execute() = repo.clearSearchHistory()
 }

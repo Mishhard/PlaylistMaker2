@@ -25,7 +25,6 @@ class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        Creator.init(this)
 
         val rootView: LinearLayout = findViewById(R.id.root_view)
         applySystemBarsPadding(rootView)

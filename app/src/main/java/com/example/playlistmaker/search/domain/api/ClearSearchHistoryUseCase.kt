@@ -1,5 +1,5 @@
 package com.example.playlistmaker.search.domain.api
 
-interface ClearSearchHistoryInteractor {
+interface ClearSearchHistoryUseCase {
     fun execute()
 }
