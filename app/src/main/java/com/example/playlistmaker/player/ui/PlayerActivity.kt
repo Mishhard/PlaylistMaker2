@@ -31,41 +31,50 @@ class PlayerActivity : BaseActivity() {
 
         val track = intent.getParcelableExtra<Track>("track") ?: return
 
-        bindViews()
-        applyInsets()
+        ivCover = findViewById(R.id.track_cover)
+        ivPlay  = findViewById(R.id.play)
+        tvTimer = findViewById(R.id.timer)
+        ivBack  = findViewById(R.id.back_button)
+
+        val root = findViewById<ConstraintLayout>(R.id.constraintRoot)
+        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
+            val sys = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, sys.top, 0, sys.bottom)
+            insets
+        }
 
         Glide.with(this)
             .load(track.getFullCover())
             .transform(RoundedCorners(16))
             .placeholder(R.drawable.track_placeholder)
             .into(ivCover)
-
-        findViewById<TextView>(R.id.track_name).text = track.trackName
+        findViewById<TextView>(R.id.track_name).text  = track.trackName
         findViewById<TextView>(R.id.artist_name).text = track.artistName
         findViewById<TextView>(R.id.duration_value).text = track.getFormattedTime()
         findViewById<TextView>(R.id.year_value).text     = track.getReleaseYear()
         findViewById<TextView>(R.id.genre_value).text    = track.primaryGenreName
         findViewById<TextView>(R.id.country_value).text  = track.country
-        findViewById<TextView>(R.id.timer).text          = track.getFormattedTime()
+        tvTimer.text = track.getFormattedTime()
 
         vm.state.observe(this) { st ->
             when (st) {
-                is PlayerState.Loading  -> {
-                    ivPlay.isEnabled  = false
+                is PlayerState.Loading   -> {
+                    ivPlay.isEnabled = false
                     ivPlay.isClickable = false
                 }
-                is PlayerState.Prepared -> {
-                    ivPlay.isEnabled  = true
+                is PlayerState.Prepared  -> {
+                    ivPlay.isEnabled = true
                     ivPlay.isClickable = true
                 }
-                is PlayerState.Playing  -> ivPlay.setImageResource(R.drawable.pause)
-                is PlayerState.Paused   -> ivPlay.setImageResource(R.drawable.play)
-                is PlayerState.Position ->
-                    findViewById<TextView>(R.id.timer)
-                        .text = formatTime(st.ms)
+                is PlayerState.Playing   -> ivPlay.setImageResource(R.drawable.pause)
+                is PlayerState.Paused,
+                is PlayerState.Completed -> ivPlay.setImageResource(R.drawable.play)
             }
         }
 
+        vm.positionLiveData.observe(this) { ms ->
+            tvTimer.text = formatTime(ms)
+        }
         ivPlay.setOnClickListener {
             if (vm.isPlaying()) vm.pause()
             else vm.play()
@@ -75,23 +84,7 @@ class PlayerActivity : BaseActivity() {
         vm.prepare(track.previewUrl)
     }
 
-    private fun bindViews() {
-        ivCover = findViewById(R.id.track_cover)
-        ivPlay  = findViewById(R.id.play)
-        tvTimer = findViewById(R.id.timer)
-        ivBack  = findViewById(R.id.back_button)
-    }
-
-    private fun applyInsets() {
-        val root = findViewById<ConstraintLayout>(R.id.constraintRoot)
-        ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
-            val sys = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(0, sys.top, 0, sys.bottom)
-            insets
-        }
-    }
-
-    private fun formatTime(ms: Int) =
+    private fun formatTime(ms: Int): String =
         String.format("%02d:%02d", ms / 60000, (ms / 1000) % 60)
 
     override fun onDestroy() {

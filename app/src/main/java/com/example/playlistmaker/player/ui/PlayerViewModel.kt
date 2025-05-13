@@ -1,19 +1,15 @@
 package com.example.playlistmaker.player.ui
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-
-sealed class PlayerState {
-    object Loading : PlayerState()
-    object Prepared : PlayerState()
-    object Playing : PlayerState()
-    object Paused  : PlayerState()
-    data class Position(val ms: Int) : PlayerState()
-}
 
 class PlayerViewModel(
     private val interactor: PlayerInteractor
@@ -21,6 +17,9 @@ class PlayerViewModel(
 
     private val _state = MutableLiveData<PlayerState>()
     val state: LiveData<PlayerState> = _state
+
+    private val _position = MutableLiveData<Int>()
+    val positionLiveData: LiveData<Int> = _position
 
     private var posJob: Job? = null
 
@@ -32,10 +31,9 @@ class PlayerViewModel(
                 _state.postValue(PlayerState.Prepared)
             },
             onCompletion = {
-                // при завершении трека
                 posJob?.cancel()
-                _state.postValue(PlayerState.Paused)
-                _state.postValue(PlayerState.Position(0))
+                _position.postValue(0)
+                _state.postValue(PlayerState.Completed)
             }
         )
     }
@@ -43,20 +41,19 @@ class PlayerViewModel(
     fun play() {
         interactor.play()
         _state.value = PlayerState.Playing
-
         posJob = viewModelScope.launch {
             while (isActive) {
                 delay(300)
                 val p = interactor.getCurrentPosition()
-                _state.postValue(PlayerState.Position(p))
+                _position.postValue(p)
             }
         }
     }
 
     fun pause() {
         interactor.pause()
-        _state.value = PlayerState.Paused
         posJob?.cancel()
+        _state.value = PlayerState.Paused
     }
 
     fun release() {
@@ -75,7 +72,7 @@ class PlayerViewModel(
         fun provideFactory(interactor: PlayerInteractor) =
             object : ViewModelProvider.Factory {
                 @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                override fun <T : ViewModel> create(modelClass: Class<T>) =
                     PlayerViewModel(interactor) as T
             }
     }
