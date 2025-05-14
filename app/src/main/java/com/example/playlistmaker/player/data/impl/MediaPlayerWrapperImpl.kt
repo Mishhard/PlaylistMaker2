@@ -16,7 +16,7 @@ class MediaPlayerWrapperImpl : MediaPlayerWrapper {
     override fun prepareAsync() = mediaPlayer.prepareAsync()
     override fun start() = mediaPlayer.start()
     override fun pause() = mediaPlayer.pause()
-    override fun release() = mediaPlayer.release()
+    override fun release() = mediaPlayer.reset()
     override fun getCurrentPosition(): Int = mediaPlayer.currentPosition
     override fun isPlaying(): Boolean = mediaPlayer.isPlaying
 }
