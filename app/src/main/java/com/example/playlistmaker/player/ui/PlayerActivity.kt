@@ -12,14 +12,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.BaseActivity
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.ui.models.TrackUiModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : BaseActivity() {
 
-    private val vm: PlayerViewModel by viewModels {
-        PlayerViewModel.provideFactory(Creator.playerInteractor)
-    }
+    private val viewModel: PlayerViewModel by viewModel()
+
 
     private lateinit var ivCover: ImageView
     private lateinit var ivPlay:  ImageView
@@ -64,7 +63,7 @@ class PlayerActivity : BaseActivity() {
         findViewById<TextView>(R.id.country_value).text  = track.country
         tvTimer.text = track.getFormattedTime()
 
-        vm.state.observe(this) { st ->
+        viewModel.state.observe(this) { st ->
             when (st) {
                 is PlayerState.Loading   -> {
                     ivPlay.isEnabled = false
@@ -80,16 +79,16 @@ class PlayerActivity : BaseActivity() {
             }
         }
 
-        vm.positionLiveData.observe(this) { ms ->
+        viewModel.positionLiveData.observe(this) { ms ->
             tvTimer.text = formatTime(ms)
         }
         ivPlay.setOnClickListener {
-            if (vm.isPlaying()) vm.pause()
-            else vm.play()
+            if (viewModel.isPlaying()) viewModel.pause()
+            else viewModel.play()
         }
         ivBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-        vm.prepare(track.previewUrl)
+        viewModel.prepare(track.previewUrl)
     }
 
     private fun formatTime(ms: Int): String =
@@ -97,6 +96,6 @@ class PlayerActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        vm.release()
+        viewModel.release()
     }
 }

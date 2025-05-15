@@ -8,19 +8,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
-import androidx.activity.viewModels
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.BaseActivity
-import com.example.playlistmaker.creator.Creator
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SettingsActivity : BaseActivity() {
 
-    private val viewModel: SettingsViewModel by viewModels {
-        SettingsViewModel.provideFactory(
-            Creator.getSettingsInteractor,
-            Creator.saveSettingsInteractor
-        )
-    }
+    private val viewModel: SettingsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
