@@ -18,5 +18,6 @@
     <string name="Year">Год</string>
     <string name="Album">Альбом</string>
     <string name="Duration">Длительность</string>
+    <string name="new_playlist">Новый плейлист</string>
 
 </resources>
