@@ -1,6 +1,7 @@
 package com.example.playlistmaker.di
 
 import android.content.Context
+import android.media.MediaPlayer
 import com.example.playlistmaker.common.PLAYLISTMAKER_PREFERENCES
 import com.example.playlistmaker.player.data.MediaPlayerWrapper
 import com.example.playlistmaker.player.data.impl.MediaPlayerWrapperImpl
@@ -24,13 +25,19 @@ val dataModule = module {
             .build()
     }
     single { get<Retrofit>().create(ItunesApi::class.java) }
-    single { androidContext().getSharedPreferences(
-        PLAYLISTMAKER_PREFERENCES, Context.MODE_PRIVATE
-    ) }
+    single {
+        androidContext().getSharedPreferences(
+            PLAYLISTMAKER_PREFERENCES, Context.MODE_PRIVATE
+        )
+    }
     single { SearchHistory(get()) }
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
     single<TrackRepository> {
         TrackRepositoryImpl(get(), get())
     }
-    single<MediaPlayerWrapper> { MediaPlayerWrapperImpl() }
+
+    factory { MediaPlayer() }
+    single<MediaPlayerWrapper> {
+        MediaPlayerWrapperImpl(get())
+    }
 }

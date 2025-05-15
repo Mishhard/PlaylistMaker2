@@ -18,13 +18,13 @@ import com.example.playlistmaker.settings.domain.impl.SaveSettingsInteractorImpl
 
 
 val domainModule = module {
-    single<SearchTracksInteractor> { SearchTracksInteractorImpl(get()) }
-    single<GetSearchHistoryUseCase> { GetSearchHistoryUseCaseImpl(get()) }
-    single<SaveSearchTermUseCase>  { SaveSearchTermUseCaseImpl(get()) }
-    single<ClearSearchHistoryUseCase> { ClearSearchHistoryUseCaseImpl(get()) }
+    factory<SearchTracksInteractor> { SearchTracksInteractorImpl(get()) }
+    factory<GetSearchHistoryUseCase> { GetSearchHistoryUseCaseImpl(get()) }
+    factory<SaveSearchTermUseCase>  { SaveSearchTermUseCaseImpl(get()) }
+    factory<ClearSearchHistoryUseCase> { ClearSearchHistoryUseCaseImpl(get()) }
 
-    single<GetSettingsInteractor> { GetSettingsInteractorImpl(get()) }
-    single<SaveSettingsInteractor> { SaveSettingsInteractorImpl(get()) }
+    factory<GetSettingsInteractor> { GetSettingsInteractorImpl(get()) }
+    factory<SaveSettingsInteractor> { SaveSettingsInteractorImpl(get()) }
 
-    single<PlayerInteractor> { PlayerInteractorImpl(get()) }
+    factory<PlayerInteractor> { PlayerInteractorImpl(get()) }
 }

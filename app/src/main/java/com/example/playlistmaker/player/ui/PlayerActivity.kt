@@ -63,6 +63,13 @@ class PlayerActivity : BaseActivity() {
         findViewById<TextView>(R.id.country_value).text  = track.country
         tvTimer.text = track.getFormattedTime()
 
+        if (!track.collectionName.isNullOrEmpty()) {
+            findViewById<TextView>(R.id.album_value).text = track.collectionName
+            findViewById<TextView>(R.id.album_value).visibility = TextView.VISIBLE
+        } else {
+            findViewById<TextView>(R.id.album_value).visibility = TextView.GONE
+        }
+
         viewModel.state.observe(this) { st ->
             when (st) {
                 is PlayerState.Loading   -> {
