@@ -1,52 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/root_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/mainBackgroundColor"
-    style="@style/LinearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false"
     android:clipToPadding="false">
 
-    <FrameLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        app:titleTextAppearance="?attr/titleTextAppearance"
+        android:background="?attr/colorPrimary"
+        app:titleTextColor="?attr/primaryTextColor" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="42dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="@color/white"
-                style="@style/TextView" />
-        </LinearLayout>
-
-    </FrameLayout>
-
-    <LinearLayout
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_weight="1"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/searchButton"
-            android:text="@string/search"
-            app:icon="@drawable/search"
-            style="@style/MainButton" />
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/libraryButton"
-            android:text="@string/media_library"
-            app:icon="@drawable/library"
-            style="@style/MainButton" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:menu="@menu/bottom_nav_menu" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/settingsButton"
-            android:text="@string/settings"
-            app:icon="@drawable/settings"
-            style="@style/MainButton" />
-    </LinearLayout>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
