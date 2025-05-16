@@ -36,9 +36,6 @@ class MediaLibraryFragment : Fragment() {
             }
         }.attach()
 
-        binding.backButton.setOnClickListener {
-            requireActivity().finish()
-        }
     }
 
     override fun onDestroyView() {

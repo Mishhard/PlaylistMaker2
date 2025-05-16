@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -32,12 +33,10 @@ class SettingsFragment : Fragment() {
 
 
         val themeSwitcher: SwitchCompat = view.findViewById(R.id.themeSwitcher)
-        val backButton: ImageView    = view.findViewById(R.id.backButton)
         val shareButton: Button      = view.findViewById(R.id.shareButton)
         val supportButton: Button    = view.findViewById(R.id.supportButton)
         val termsButton: Button      = view.findViewById(R.id.termsButton)
 
-        // 2.2. Подписка на состояние ViewModel
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is SettingsState.Loading -> themeSwitcher.isEnabled = false
@@ -52,22 +51,17 @@ class SettingsFragment : Fragment() {
                     )
                 }
             }
-        }  // Логика взята из SettingsActivity :contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}
+        }
 
-        // 2.3. Обработчики пользовательских действий
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
             viewModel.onThemeToggled(checked)
         }
 
-        backButton.setOnClickListener {
-            findNavController().popBackStack()
-        }
         shareButton.setOnClickListener { shareApp() }
         supportButton.setOnClickListener { contactSupport() }
         termsButton.setOnClickListener { openUserTerms() }
     }
 
-    // 2.4. Вспомогательные методы копируются из SettingsActivity
     private fun shareApp() {
         startActivity(Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"

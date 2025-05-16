@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".player.ui.PlayerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustNothing"/>
         <activity
             android:name=".main.ui.MainActivity"
             android:exported="true">

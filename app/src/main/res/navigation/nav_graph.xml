@@ -19,12 +19,9 @@
         android:name="com.example.playlistmaker.settings.ui.SettingsFragment"
         android:label="@string/settings" />
 
-    <fragment
+    <activity
         android:id="@+id/playerFragment"
-        android:name="com.example.playlistmaker.player.ui.PlayerFragment"
+        android:name="com.example.playlistmaker.player.ui.PlayerActivity"
         android:label="@string/player">
-        <argument
-            android:name="track"
-            app:argType="com.example.playlistmaker.player.ui.models.TrackUiModel" />
-    </fragment>
+    </activity>
 </navigation>
