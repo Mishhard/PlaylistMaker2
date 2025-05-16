@@ -4,11 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.LinearLayout
+import com.example.playlistmaker.library.ui.MediaLibraryActivity
 import com.example.playlistmaker.common.BaseActivity
 import com.example.playlistmaker.R
 import com.example.playlistmaker.search.ui.SearchActivity
 import com.example.playlistmaker.settings.ui.SettingsActivity
-import com.example.playlistmaker.library.ui.LibraryActivity
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class MainActivity : BaseActivity() {
         val libraryButton = findViewById<Button>(R.id.libraryButton)
 
         libraryButton.setOnClickListener {
-            val displayIntent = Intent(this, LibraryActivity::class.java)
+            val displayIntent = Intent(this, MediaLibraryActivity::class.java)
             startActivity(displayIntent)
         }
         val settingsButton = findViewById<Button>(R.id.settingsButton)
