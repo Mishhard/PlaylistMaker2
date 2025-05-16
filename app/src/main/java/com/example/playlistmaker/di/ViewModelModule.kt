@@ -5,6 +5,8 @@ import org.koin.dsl.module
 import com.example.playlistmaker.search.ui.SearchViewModel
 import com.example.playlistmaker.player.ui.PlayerViewModel
 import com.example.playlistmaker.settings.ui.SettingsViewModel
+import com.example.playlistmaker.library.ui.FavoriteTracksViewModel
+import com.example.playlistmaker.library.ui.PlaylistsViewModel
 
 
 val viewModelModule = module {
@@ -19,4 +21,7 @@ val viewModelModule = module {
         get(),
         get()
     ) }
+
+    viewModel { FavoriteTracksViewModel() }
+    viewModel { PlaylistsViewModel() }
 }
