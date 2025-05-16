@@ -1,32 +1,46 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.main.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.LinearLayout
+import com.example.playlistmaker.library.ui.MediaLibraryActivity
+import com.example.playlistmaker.common.BaseActivity
 import com.example.playlistmaker.R
+import com.example.playlistmaker.search.ui.SearchActivity
+import com.example.playlistmaker.settings.ui.SettingsActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
+        val rootView = findViewById<LinearLayout>(R.id.root_view)
+        applySystemBarsPadding(rootView)
+
         val searchButton = findViewById<Button>(R.id.searchButton)
+
         searchButton.setOnClickListener {
-            val displayIntent = Intent(this, SearchActivity::class.java)
+            val displayIntent = Intent(this,
+                SearchActivity::class.java)
             startActivity(displayIntent)
         }
 
         val libraryButton = findViewById<Button>(R.id.libraryButton)
+
         libraryButton.setOnClickListener {
-            val displayIntent = Intent(this, LibraryActivity::class.java)
+            val displayIntent = Intent(this, MediaLibraryActivity::class.java)
             startActivity(displayIntent)
         }
         val settingsButton = findViewById<Button>(R.id.settingsButton)
+
+
         settingsButton.setOnClickListener {
             val displayIntent = Intent(this, SettingsActivity::class.java)
             startActivity(displayIntent)
         }
+
     }
 
 }
