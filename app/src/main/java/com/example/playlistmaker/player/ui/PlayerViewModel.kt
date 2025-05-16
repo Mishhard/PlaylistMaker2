@@ -3,7 +3,6 @@ package com.example.playlistmaker.player.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import kotlinx.coroutines.Job
@@ -60,12 +59,4 @@ class PlayerViewModel(
 
     fun isPlaying(): Boolean = interactor.isPlaying()
 
-    companion object {
-        fun provideFactory(interactor: PlayerInteractor) =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>) =
-                    PlayerViewModel(interactor) as T
-            }
-    }
 }

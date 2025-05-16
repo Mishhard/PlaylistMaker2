@@ -29,19 +29,4 @@ class SettingsViewModel(
             _state.value = SettingsState.Content(enabled)
         }
     }
-
-    companion object {
-        fun provideFactory(
-            getSettingsInteractor: GetSettingsInteractor,
-            saveSettingsInteractor: SaveSettingsInteractor
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SettingsViewModel(
-                    getSettingsInteractor,
-                    saveSettingsInteractor
-                ) as T
-            }
-        }
-    }
 }

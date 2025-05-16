@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,9 +19,10 @@ import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.common.BaseActivity
 import com.example.playlistmaker.common.TracksAdapter
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.player.ui.models.TrackUiModel
 import com.example.playlistmaker.player.domain.models.Track as DomainTrack
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 
 class SearchActivity : BaseActivity() {
@@ -54,24 +54,22 @@ class SearchActivity : BaseActivity() {
         }
     }
 
-    private val viewModel: SearchViewModel by viewModels {
-        SearchViewModel.provideFactory(
-            Creator.searchUseCase,
-            Creator.getSearchHistoryInteractor,
-            Creator.saveSearchTermInteractor,
-            Creator.clearSearchHistoryInteractor
-        )
-    }
+    private val viewModel: SearchViewModel by viewModel()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
-        rootView = findViewById(R.id.root_view)
-        applySystemBarsPadding(rootView)
         bindViews()
         setupRecycler()
         setupBindings()
+
+        etQuery.doOnTextChanged { text,_,_,_ ->
+            viewModel.onQueryChanged(text.toString())
+        }
+
+        rootView = findViewById(R.id.root_view)
+        applySystemBarsPadding(rootView)
     }
 
     private fun bindViews() {

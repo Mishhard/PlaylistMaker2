@@ -75,23 +75,4 @@ class SearchViewModel(
         clearHistoryInteractor.execute()
         _state.value = SearchState.History(emptyList())
     }
-
-    companion object {
-        fun provideFactory(
-            searchInteractor: SearchTracksInteractor,
-            historyInteractor: GetSearchHistoryUseCase,
-            saveTermInteractor: SaveSearchTermUseCase,
-            clearHistoryInteractor: ClearSearchHistoryUseCase
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return SearchViewModel(
-                    searchInteractor,
-                    historyInteractor,
-                    saveTermInteractor,
-                    clearHistoryInteractor
-                ) as T
-            }
-        }
-    }
 }
