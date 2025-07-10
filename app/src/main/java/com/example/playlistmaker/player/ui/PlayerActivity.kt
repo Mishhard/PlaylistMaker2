@@ -80,8 +80,14 @@ class PlayerActivity : BaseActivity() {
                     ivPlay.isEnabled = true
                     ivPlay.isClickable = true
                 }
-                is PlayerState.Playing   -> ivPlay.setImageResource(R.drawable.pause)
-                is PlayerState.Paused,
+                is PlayerState.Playing -> {
+                    ivPlay.setImageResource(R.drawable.pause)
+                    tvTimer.text = formatTime(st.progress)
+                }
+                is PlayerState.Paused, is PlayerState.Completed -> {
+                    ivPlay.setImageResource(R.drawable.play)
+                    tvTimer.text = formatTime(st.progress)
+                }
                 is PlayerState.Completed -> ivPlay.setImageResource(R.drawable.play)
             }
         }

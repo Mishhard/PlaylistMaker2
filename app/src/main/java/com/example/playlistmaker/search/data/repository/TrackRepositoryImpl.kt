@@ -5,28 +5,36 @@ import com.example.playlistmaker.search.data.dto.SearchResponse
 import com.example.playlistmaker.search.data.dto.TrackDto
 import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.search.domain.api.TrackRepository
+import com.example.playlistmaker.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TrackRepositoryImpl(
     private val api: ItunesApi,
     private val history: SearchHistory
 ) : TrackRepository {
 
-    override suspend fun searchTracks(term: String): List<Track> {
-        val searchResponse: SearchResponse = api.searchTracks(term)
-        val dtoList: List<TrackDto> = searchResponse.results ?: emptyList()
-        return dtoList.map { dto: TrackDto ->
-            Track(
-                trackName = dto.trackName.orEmpty(),
-                artistName = dto.artistName.orEmpty(),
-                artworkUrl100 = dto.artworkUrl100.orEmpty(),
-                previewUrl = dto.previewUrl.orEmpty(),
-                collectionName = dto.collectionName,
-                releaseDate = dto.releaseDate,
-                primaryGenreName = dto.primaryGenreName,
-                country = dto.country,
-                trackTimeMillis = dto.trackTimeMillis ?: 0L,
-                trackId = dto.trackId,
+    override fun searchTracks(term: String): Flow<Resource<List<Track>>> = flow {
+        try {
+            val searchResponse: SearchResponse = api.searchTracks(term)
+            val dtoList: List<TrackDto> = searchResponse.results ?: emptyList()
+            val tracks = dtoList.map { dto ->
+                Track(
+                    trackName = dto.trackName.orEmpty(),
+                    artistName = dto.artistName.orEmpty(),
+                    artworkUrl100 = dto.artworkUrl100.orEmpty(),
+                    previewUrl = dto.previewUrl.orEmpty(),
+                    collectionName = dto.collectionName,
+                    releaseDate = dto.releaseDate,
+                    primaryGenreName = dto.primaryGenreName,
+                    country = dto.country,
+                    trackTimeMillis = dto.trackTimeMillis ?: 0L,
+                    trackId = dto.trackId,
                 )
+            }
+            emit(Resource.Success(tracks))
+        } catch (e: Exception) {
+            emit(Resource.Error("Ошибка сети"))
         }
     }
 

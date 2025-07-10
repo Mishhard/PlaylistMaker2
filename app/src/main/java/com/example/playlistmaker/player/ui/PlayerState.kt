@@ -1,9 +1,9 @@
 package com.example.playlistmaker.player.ui
 
-sealed class PlayerState {
-    object Loading   : PlayerState()
-    object Prepared  : PlayerState()
-    object Playing   : PlayerState()
-    object Paused    : PlayerState()
-    object Completed : PlayerState()
+sealed class PlayerState(open val progress: Int = 0) {
+    object Loading : PlayerState()
+    object Prepared : PlayerState()
+    data class Playing(override val progress: Int) : PlayerState(progress)
+    data class Paused(override val progress: Int) : PlayerState(progress)
+    object Completed : PlayerState(0)
 }

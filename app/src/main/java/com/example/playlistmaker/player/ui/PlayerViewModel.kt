@@ -37,11 +37,11 @@ class PlayerViewModel(
 
     fun play() {
         interactor.play()
-        _state.value = PlayerState.Playing
         posJob = viewModelScope.launch {
             while (isActive) {
                 delay(300)
-                _position.postValue(interactor.getCurrentPosition())
+                val position = interactor.getCurrentPosition()
+                _state.postValue(PlayerState.Playing(position))
             }
         }
     }
@@ -49,8 +49,9 @@ class PlayerViewModel(
     fun pause() {
         interactor.pause()
         posJob?.cancel()
-        _state.value = PlayerState.Paused
+        _state.value = PlayerState.Paused(interactor.getCurrentPosition())
     }
+
 
     fun release() {
         posJob?.cancel()
