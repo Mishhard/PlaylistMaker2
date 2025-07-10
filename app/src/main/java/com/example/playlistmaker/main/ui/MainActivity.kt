@@ -1,14 +1,16 @@
 package com.example.playlistmaker.main.ui
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.LinearLayout
-import com.example.playlistmaker.library.ui.MediaLibraryActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.playlistmaker.common.BaseActivity
 import com.example.playlistmaker.R
-import com.example.playlistmaker.search.ui.SearchActivity
-import com.example.playlistmaker.settings.ui.SettingsActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.navigation.ui.setupWithNavController
 
 class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,30 +19,23 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         val rootView = findViewById<LinearLayout>(R.id.root_view)
-        applySystemBarsPadding(rootView)
-
-        val searchButton = findViewById<Button>(R.id.searchButton)
-
-        searchButton.setOnClickListener {
-            val displayIntent = Intent(this,
-                SearchActivity::class.java)
-            startActivity(displayIntent)
+        ViewCompat.setOnApplyWindowInsetsListener(rootView) { v, insets ->
+            val sys = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, sys.top, 0, sys.bottom)
+            insets
         }
 
-        val libraryButton = findViewById<Button>(R.id.libraryButton)
+        val navHost = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHost.navController
 
-        libraryButton.setOnClickListener {
-            val displayIntent = Intent(this, MediaLibraryActivity::class.java)
-            startActivity(displayIntent)
-        }
-        val settingsButton = findViewById<Button>(R.id.settingsButton)
-
-
-        settingsButton.setOnClickListener {
-            val displayIntent = Intent(this, SettingsActivity::class.java)
-            startActivity(displayIntent)
-        }
-
+        findViewById<BottomNavigationView>(R.id.bottom_nav)
+            .setupWithNavController(navController)
     }
 
+    override fun onSupportNavigateUp(): Boolean =
+        (supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
+                as NavHostFragment)
+            .navController
+            .navigateUp() || super.onSupportNavigateUp()
 }

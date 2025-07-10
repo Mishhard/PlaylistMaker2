@@ -3,41 +3,51 @@ package com.example.playlistmaker.settings.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.BaseActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SettingsActivity : BaseActivity() {
+class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.fragment_settings, container, false)
 
-        val rootView: LinearLayout = findViewById(R.id.root_view)
-        applySystemBarsPadding(rootView)
 
-        val themeSwitcher: SwitchCompat = findViewById(R.id.themeSwitcher)
-        val backButton: ImageView = findViewById(R.id.backButton)
-        val shareButton: Button   = findViewById(R.id.shareButton)
-        val supportButton: Button = findViewById(R.id.supportButton)
-        val termsButton: Button   = findViewById(R.id.termsButton)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        viewModel.state.observe(this) { state ->
+
+        val themeSwitcher: SwitchCompat = view.findViewById(R.id.themeSwitcher)
+        val shareButton: Button      = view.findViewById(R.id.shareButton)
+        val supportButton: Button    = view.findViewById(R.id.supportButton)
+        val termsButton: Button      = view.findViewById(R.id.termsButton)
+
+        viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is SettingsState.Loading -> themeSwitcher.isEnabled = false
                 is SettingsState.Content -> {
                     themeSwitcher.isEnabled = true
                     themeSwitcher.isChecked = state.darkThemeEnabled
                     AppCompatDelegate.setDefaultNightMode(
-                        if (state.darkThemeEnabled) AppCompatDelegate.MODE_NIGHT_YES
-                        else AppCompatDelegate.MODE_NIGHT_NO
+                        if (state.darkThemeEnabled)
+                            AppCompatDelegate.MODE_NIGHT_YES
+                        else
+                            AppCompatDelegate.MODE_NIGHT_NO
                     )
                 }
             }
@@ -47,7 +57,6 @@ class SettingsActivity : BaseActivity() {
             viewModel.onThemeToggled(checked)
         }
 
-        backButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         shareButton.setOnClickListener { shareApp() }
         supportButton.setOnClickListener { contactSupport() }
         termsButton.setOnClickListener { openUserTerms() }
@@ -69,6 +78,7 @@ class SettingsActivity : BaseActivity() {
     }
 
     private fun openUserTerms() {
-        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.user_terms_url))))
+        startActivity(Intent(Intent.ACTION_VIEW,
+            Uri.parse(getString(R.string.user_terms_url))))
     }
 }
