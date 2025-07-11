@@ -8,14 +8,16 @@ import com.example.playlistmaker.player.domain.models.Track as DomainTrack
 data class TrackUiModel(
     val trackName: String,
     val artistName: String,
-    val trackTimeMillis: Long,
+    val trackTimeMillis: Long?,
     val artworkUrl100: String,
     val trackId: Int,
     val collectionName: String?,
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    val previewUrl: String
+    val previewUrl: String,
+    val isFavorite: Boolean
+
 ) : Parcelable {
     fun toDomain(): DomainTrack = DomainTrack(
         trackName, artistName, trackTimeMillis,
@@ -24,8 +26,14 @@ data class TrackUiModel(
         country, previewUrl
     )
 
+    fun getFormattedTime(): String {
+        val minutes = (trackTimeMillis ?: 0L) / 1000 / 60
+        val seconds = (trackTimeMillis ?: 0L) / 1000 % 60
+        return String.format("%d:%02d", minutes, seconds)
+    }
+
     companion object {
-        fun fromDomain(t: DomainTrack): TrackUiModel = TrackUiModel(
+        fun fromDomain(t: DomainTrack, isFavorite: Boolean): TrackUiModel = TrackUiModel(
             t.trackName,
             t.artistName,
             t.trackTimeMillis,
@@ -35,7 +43,8 @@ data class TrackUiModel(
             t.releaseDate,
             t.primaryGenreName,
             t.country,
-            t.previewUrl
+            t.previewUrl,
+            isFavorite = isFavorite
         )
     }
 }

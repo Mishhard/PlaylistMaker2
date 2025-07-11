@@ -4,7 +4,9 @@ import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.di.dataModule
+import com.example.playlistmaker.di.dbModule
 import com.example.playlistmaker.di.domainModule
+import com.example.playlistmaker.di.repositoryModule
 import com.example.playlistmaker.di.viewModelModule
 import org.koin.core.context.startKoin
 import org.koin.android.ext.koin.androidContext
@@ -24,7 +26,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(listOf(dataModule, domainModule, viewModelModule))
+            modules(listOf(dataModule, domainModule, viewModelModule, repositoryModule, dbModule))
         }
 
         darkTheme = sharedPrefs.getBoolean(APP_THEME_KEY, false)

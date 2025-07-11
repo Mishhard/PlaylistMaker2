@@ -2,12 +2,12 @@ package com.example.playlistmaker.common
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.player.domain.models.Track
+import com.example.playlistmaker.player.ui.models.TrackUiModel
 
 class TracksAdapter : RecyclerView.Adapter<TrackViewHolder>() {
 
-    var tracks = ArrayList<Track>()
-    private var onItemClickListener: ((Track) -> Unit)? = null
+    var tracks = ArrayList<TrackUiModel>()
+    private var onItemClickListener: ((TrackUiModel) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         return TrackViewHolder(parent)
@@ -16,12 +16,14 @@ class TracksAdapter : RecyclerView.Adapter<TrackViewHolder>() {
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         val track = tracks[position]
         holder.bind(track)
-        holder.itemView.setOnClickListener { onItemClickListener?.invoke(track) }
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.invoke(track)
+        }
     }
 
     override fun getItemCount(): Int = tracks.size
 
-    fun setOnItemClickListener(listener: (Track) -> Unit) {
+    fun setOnItemClickListener(listener: (TrackUiModel) -> Unit) {
         onItemClickListener = listener
     }
 }

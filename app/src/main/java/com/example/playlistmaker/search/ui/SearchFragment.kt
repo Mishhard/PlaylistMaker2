@@ -26,15 +26,15 @@ class SearchFragment : Fragment() {
     private val viewModel: SearchViewModel by viewModel()
 
     private val resultsAdapter = TracksAdapter().apply {
-        setOnItemClickListener { track ->
-            viewModel.saveTrack(track)
-            openPlayer(track)
+        setOnItemClickListener { trackUiModel  ->
+            viewModel.saveTrack(trackUiModel.toDomain() )
+            openPlayer(trackUiModel.toDomain() )
         }
     }
     private val historyAdapter = TracksAdapter().apply {
-        setOnItemClickListener { track ->
-            viewModel.onTrackClicked(track)
-            openPlayer(track)
+        setOnItemClickListener { trackUiModel  ->
+            viewModel.onTrackClicked(trackUiModel.toDomain() )
+            openPlayer(trackUiModel.toDomain() )
         }
     }
 
@@ -62,8 +62,14 @@ class SearchFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is SearchState.Loading -> showLoading()
-                is SearchState.Content -> showResults(state.tracks)
-                is SearchState.History -> showHistory(state.tracks)
+                is SearchState.Content -> showResults(
+                    state.tracks.map { TrackUiModel.fromDomain(it, isFavorite = false) }
+                )
+
+                is SearchState.History -> showHistory(
+                    state.tracks.map { TrackUiModel.fromDomain(it, isFavorite = false) }
+                )
+
                 is SearchState.Empty   -> showEmpty(state.message)
                 is SearchState.Error   -> showError(state.message)
             }
@@ -95,7 +101,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun openPlayer(domainTrack: DomainTrack) {
-        val uiModel = TrackUiModel.fromDomain(domainTrack)
+        val uiModel = TrackUiModel.fromDomain(domainTrack, isFavorite = false)
         startActivity(Intent(requireContext(), PlayerActivity::class.java).apply {
             putExtra("track", uiModel)
         })
@@ -108,7 +114,7 @@ class SearchFragment : Fragment() {
         binding.searchHistoryContainer.isVisible = false
     }
 
-    private fun showResults(list: List<DomainTrack>) {
+    private fun showResults(list: List<TrackUiModel>) {
         binding.progressBar.isVisible = false
         binding.placeholderContainer.isVisible = false
         binding.searchHistoryContainer.isVisible = false
@@ -117,7 +123,7 @@ class SearchFragment : Fragment() {
         resultsAdapter.notifyDataSetChanged()
     }
 
-    private fun showHistory(list: List<DomainTrack>) {
+    private fun showHistory(list: List<TrackUiModel>) {
         binding.progressBar.isVisible = false
         binding.placeholderContainer.isVisible = false
         binding.rvTracks.isVisible = false
