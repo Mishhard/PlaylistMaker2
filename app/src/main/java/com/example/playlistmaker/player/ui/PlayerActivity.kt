@@ -17,6 +17,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : BaseActivity() {
 
+    companion object {
+        const val EXTRA_TRACK = "track"
+    }
+
     private val viewModel: PlayerViewModel by viewModel()
 
 

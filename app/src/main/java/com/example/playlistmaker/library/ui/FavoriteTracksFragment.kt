@@ -7,16 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.databinding.FragmentFavoriteTracksBinding
 import com.example.playlistmaker.player.domain.db.FavoriteTracksViewModel
 import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.common.TracksAdapter
-import com.example.playlistmaker.library.presentation.FavoritesStates
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import androidx.lifecycle.lifecycleScope
+import com.example.playlistmaker.R
+import com.example.playlistmaker.library.presentation.FavoritesState
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collectLatest
+import androidx.lifecycle.repeatOnLifecycle
 
 
 
@@ -36,7 +39,7 @@ class FavoriteTracksFragment : Fragment() {
     private val adapter = TracksAdapter().apply {
         setOnItemClickListener { trackUiModel ->
             val intent = Intent(requireContext(), PlayerActivity::class.java)
-            intent.putExtra("track", trackUiModel)
+            intent.putExtra(PlayerActivity.EXTRA_TRACK, trackUiModel)
             startActivity(intent)
         }
     }
@@ -56,33 +59,37 @@ class FavoriteTracksFragment : Fragment() {
         binding.rvFavorites.layoutManager = LinearLayoutManager(requireContext())
         binding.rvFavorites.adapter = adapter
 
-        lifecycleScope.launch {
-            viewModel.uiState.collectLatest { state ->
-                when (state) {
-                    is FavoritesStates.FavoritesState.Loading -> {
-                        binding.rvFavorites.isVisible = false
-                        binding.placeholderContainer.isVisible = false
-                    }
+        viewModel.loadFavorites(getString(R.string.there_are_no_favorite_tracks))
 
-                    is FavoritesStates.FavoritesState.Empty -> {
-                        binding.rvFavorites.isVisible = false
-                        binding.placeholderContainer.isVisible = true
-                        binding.placeholderMessage.text = state.message
-                    }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collectLatest { state ->
+                    when (state) {
+                        is FavoritesState.Loading -> {
+                            binding.rvFavorites.isVisible = false
+                            binding.placeholderContainer.isVisible = false
+                        }
 
-                    is FavoritesStates.FavoritesState.Content -> {
-                        binding.rvFavorites.isVisible = true
-                        binding.placeholderContainer.isVisible = false
-                        adapter.tracks = ArrayList(state.tracks)
-                        adapter.notifyDataSetChanged()
+                        is FavoritesState.Empty -> {
+                            binding.rvFavorites.isVisible = false
+                            binding.placeholderContainer.isVisible = true
+                            binding.placeholderMessage.text = state.message
+                        }
+
+                        is FavoritesState.Content -> {
+                            binding.rvFavorites.isVisible = true
+                            binding.placeholderContainer.isVisible = false
+                            adapter.tracks = ArrayList(state.tracks)
+                            adapter.notifyDataSetChanged()
+                        }
                     }
                 }
             }
         }
+    }
 
-        fun onDestroyView() {
-            super.onDestroyView()
-            _binding = null
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

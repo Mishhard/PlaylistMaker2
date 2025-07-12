@@ -103,7 +103,7 @@ class SearchFragment : Fragment() {
     private fun openPlayer(domainTrack: DomainTrack) {
         val uiModel = TrackUiModel.fromDomain(domainTrack, isFavorite = false)
         startActivity(Intent(requireContext(), PlayerActivity::class.java).apply {
-            putExtra("track", uiModel)
+            putExtra(PlayerActivity.EXTRA_TRACK, uiModel)
         })
     }
 
