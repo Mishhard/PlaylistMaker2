@@ -12,4 +12,5 @@
     <color name="light_light_gray">#E6E8EB</color>
     <color name="track_light_light_gray">#E6E8EB</color>
     <color name="player_light_gray">#AEAFB4</color>
+    <color name="player_circle_gray">#1A1B22</color>
 </resources>

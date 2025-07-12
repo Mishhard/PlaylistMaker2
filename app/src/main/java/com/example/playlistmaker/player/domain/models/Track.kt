@@ -3,7 +3,7 @@ package com.example.playlistmaker.player.domain.models
 data class Track(
     val trackName: String,
     val artistName: String,
-    val trackTimeMillis: Long,
+    val trackTimeMillis: Long?,
     val artworkUrl100: String,
     val trackId: Int,
     val collectionName: String?,
@@ -14,8 +14,8 @@ data class Track(
 ) {
     fun getFullCover(): String = artworkUrl100.replace("100x100bb", "600x600bb")
     fun getFormattedTime(): String {
-        val minutes = (trackTimeMillis / 60000)
-        val seconds = (trackTimeMillis % 60000 / 1000)
+        val minutes = (trackTimeMillis?.div(60000))
+        val seconds = (trackTimeMillis?.rem(60000)?.div(1000))
         return String.format("%02d:%02d", minutes, seconds)}
     fun getReleaseYear(): String = releaseDate.substringBefore('-')
 }

@@ -17,6 +17,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : BaseActivity() {
 
+    companion object {
+        const val EXTRA_TRACK = "track"
+    }
+
     private val viewModel: PlayerViewModel by viewModel()
 
 
@@ -24,6 +28,7 @@ class PlayerActivity : BaseActivity() {
     private lateinit var ivPlay:  ImageView
     private lateinit var tvTimer: TextView
     private lateinit var ivBack:  ImageView
+    private lateinit var ivLike:  ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +47,10 @@ class PlayerActivity : BaseActivity() {
         ivPlay  = findViewById(R.id.play)
         tvTimer = findViewById(R.id.timer)
         ivBack  = findViewById(R.id.back_button)
+        ivLike  = findViewById(R.id.like)
+
+        viewModel.setCurrentTrack(track)
+
 
         val root = findViewById<ConstraintLayout>(R.id.constraintRoot)
         ViewCompat.setOnApplyWindowInsetsListener(root) { v, insets ->
@@ -72,6 +81,8 @@ class PlayerActivity : BaseActivity() {
 
         viewModel.state.observe(this) { st ->
             when (st) {
+                is PlayerState.Liked -> ivLike.setImageResource(R.drawable.like_active)
+                is PlayerState.NotLiked -> ivLike.setImageResource(R.drawable.like)
                 is PlayerState.Loading   -> {
                     ivPlay.isEnabled = false
                     ivPlay.isClickable = false
@@ -98,6 +109,9 @@ class PlayerActivity : BaseActivity() {
         ivPlay.setOnClickListener {
             if (viewModel.isPlaying()) viewModel.pause()
             else viewModel.play()
+        }
+        ivLike.setOnClickListener {
+            viewModel.toggleFavorite()
         }
         ivBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
