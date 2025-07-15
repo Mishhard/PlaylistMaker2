@@ -9,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.player.ui.models.TrackUiModel
+import com.example.playlistmaker.utils.dpToPx
 
 class TrackViewHolder(parent: ViewGroup) :
     RecyclerView.ViewHolder(LayoutInflater.from(parent.context)
@@ -22,7 +23,8 @@ class TrackViewHolder(parent: ViewGroup) :
     fun bind(track: TrackUiModel) {
         Glide.with(itemView)
             .load(track.artworkUrl100)
-            .transform(RoundedCorners(8))
+            .transform(RoundedCorners(8.dpToPx(itemView))
+            )
             .placeholder(R.drawable.track_placeholder)
             .into(coverTrack)
 

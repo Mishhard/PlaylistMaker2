@@ -12,8 +12,11 @@ val dbModule = module {
             androidContext(),
             AppDatabase::class.java,
             "playlist_maker_database.db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     single { get<AppDatabase>().trackDao() }
+    single { get<AppDatabase>().playlistDao() }
 }

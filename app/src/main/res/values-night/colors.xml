@@ -11,4 +11,5 @@
     <color name="search_light_gray">#1A1B22</color>
     <color name="player_light_gray">#AEAFB4</color>
     <color name="player_circle_gray">#FFFFFF</color>
+    <color name="toast_text_color">#1A1B22</color>
 </resources>

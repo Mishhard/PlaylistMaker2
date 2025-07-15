@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.library.data.dto.PlaylistDto
+import com.example.playlistmaker.library.domain.api.PlaylistInteractor
 import com.example.playlistmaker.library.domain.db.FavoriteTracksRepository
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.models.Track
@@ -14,7 +16,8 @@ import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val interactor: PlayerInteractor,
-    private val favoriteTracksRepository: FavoriteTracksRepository
+    private val favoriteTracksRepository: FavoriteTracksRepository,
+    private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
     private val _state = MutableLiveData<PlayerState>()
@@ -25,8 +28,11 @@ class PlayerViewModel(
 
     private var posJob: Job? = null
 
-    private var currentTrack: Track? = null
+    var currentTrack: Track? = null
     private var isFavorite: Boolean = false
+
+    private val _playlists = MutableLiveData<List<PlaylistDto>>()
+    val playlists: LiveData<List<PlaylistDto>> = _playlists
 
     fun prepare(url: String) {
         _state.value = PlayerState.Loading
@@ -65,7 +71,7 @@ class PlayerViewModel(
 
     fun isPlaying(): Boolean = interactor.isPlaying()
 
-    fun setCurrentTrack(track: Track) {
+    fun updateCurrentTrack(track: Track) {
         currentTrack = track
         checkIsFavorite()
     }
@@ -99,4 +105,25 @@ class PlayerViewModel(
             if (isFavorite) PlayerState.Liked else PlayerState.NotLiked
         )
     }
+
+    fun loadPlaylists() {
+        viewModelScope.launch {
+            playlistInteractor.getPlaylists().collect { list ->
+                _playlists.postValue(list)
+            }
+        }
+    }
+
+
+    fun addTrackToPlaylist(playlist: PlaylistDto, onResult: (Boolean) -> Unit) {
+        val track = currentTrack ?: return
+        viewModelScope.launch {
+            val added = playlistInteractor.addTrackToPlaylist(track, playlist)
+            onResult(added)
+            loadPlaylists()
+        }
+    }
+
+
+
 }

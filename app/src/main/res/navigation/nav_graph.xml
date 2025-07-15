@@ -7,7 +7,17 @@
     <fragment
         android:id="@+id/mediaLibraryFragment"
         android:name="com.example.playlistmaker.library.ui.MediaLibraryFragment"
-        android:label="@string/media_library" />
+        android:label="@string/media_library">
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_createPlaylistFragment"
+            app:destination="@id/createPlaylistFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/createPlaylistFragment"
+        android:name="com.example.playlistmaker.library.ui.CreatePlaylistFragment"
+        android:label="@string/new_playlist" />
 
     <fragment
         android:id="@+id/searchFragment"

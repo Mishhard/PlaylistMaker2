@@ -18,4 +18,9 @@
     <dimen name="search_track_separator_size">13dp</dimen>
     <dimen name="search_placeholder_size">120dp</dimen>
     <dimen name="search_margin_top">24dp</dimen>
+    <dimen name="toast_text_size">14sp</dimen>
+    <dimen name="item_vertical_spacing">16dp</dimen>
+    <dimen name="item_horizontal_spacing">8dp</dimen>
+
+
 </resources>

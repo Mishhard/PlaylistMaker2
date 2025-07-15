@@ -1,4 +1,8 @@
 <resources>
+    <plurals name="track_count">
+        <item quantity="one">%d track</item>
+        <item quantity="other">%d tracks</item>
+    </plurals>
     <string name="app_name">Playlist Maker</string>
     <string name="search">Search</string>
     <string name="media_library">Library</string>
@@ -23,4 +27,15 @@
     <string name="you_have_not_created_any_playlists">Вы не создали ни одного плейлиста</string>
     <string name="player">Плеер</string>
     <string name="there_are_no_favorite_tracks">There are no favorite tracks</string>
+    <string name="playlist_title">Title*</string>
+    <string name="playlist_description">Description</string>
+    <string name="create">Create</string>
+    <string name="add_to_playlist">Add to playlist</string>
+    <string name="added_to_playlist">Added to playlist %1$s</string>
+    <string name="track_already_in_playlist">Track already in playlist %1$s</string>
+    <string name="playlist_created">Playlist %1$s has been created</string>
+    <string name="dialog_exit_title">Finish creating a playlist?</string>
+    <string name="dialog_exit_message">All unsaved data will be lost</string>
+    <string name="dialog_exit_negative">Cansel</string>
+    <string name="dialog_exit_positive">Finish</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.playlistmaker.main.ui
 
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -29,8 +30,29 @@ class MainActivity : BaseActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHost.navController
 
-        findViewById<BottomNavigationView>(R.id.bottom_nav)
-            .setupWithNavController(navController)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.setupWithNavController(navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            val hideBottomNavFragments = setOf(
+                R.id.createPlaylistFragment
+            )
+
+            bottomNav.visibility = if (destination.id in hideBottomNavFragments) {
+                View.GONE
+            } else {
+                View.VISIBLE
+            }
+        }
+
+        val openCreate = intent.getBooleanExtra("openCreatePlaylist", false)
+        val source = intent.getStringExtra("source")
+
+        if (openCreate) {
+            val bundle = Bundle().apply { putString("source", source) }
+            navController.navigate(R.id.createPlaylistFragment, bundle)
+        }
+
     }
 
     override fun onSupportNavigateUp(): Boolean =

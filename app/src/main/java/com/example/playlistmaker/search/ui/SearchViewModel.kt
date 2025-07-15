@@ -26,7 +26,6 @@ class SearchViewModel(
 
     private val _state = MutableLiveData<SearchState>()
     val state: LiveData<SearchState> = _state
-    private var searchJob: Job? = null
 
     init {
         loadHistory()
