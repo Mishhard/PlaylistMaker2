@@ -28,7 +28,7 @@ class PlayerViewModel(
 
     private var posJob: Job? = null
 
-    private var currentTrack: Track? = null
+    var currentTrack: Track? = null
     private var isFavorite: Boolean = false
 
     private val _playlists = MutableLiveData<List<PlaylistDto>>()
@@ -71,7 +71,7 @@ class PlayerViewModel(
 
     fun isPlaying(): Boolean = interactor.isPlaying()
 
-    fun setCurrentTrack(track: Track) {
+    fun updateCurrentTrack(track: Track) {
         currentTrack = track
         checkIsFavorite()
     }
@@ -108,17 +108,22 @@ class PlayerViewModel(
 
     fun loadPlaylists() {
         viewModelScope.launch {
-            _playlists.value = playlistInteractor.getPlaylists()
+            playlistInteractor.getPlaylists().collect { list ->
+                _playlists.postValue(list)
+            }
         }
     }
 
-    fun addTrackToPlaylist(playlist: PlaylistDto, onResult: (String) -> Unit) {
+
+    fun addTrackToPlaylist(playlist: PlaylistDto, onResult: (Boolean) -> Unit) {
         val track = currentTrack ?: return
         viewModelScope.launch {
-            val result = playlistInteractor.addTrackToPlaylist(track, playlist)
-            onResult(result)
+            val added = playlistInteractor.addTrackToPlaylist(track, playlist)
+            onResult(added)
             loadPlaylists()
         }
     }
+
+
 
 }

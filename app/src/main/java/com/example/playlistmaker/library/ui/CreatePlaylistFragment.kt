@@ -20,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
+import com.example.playlistmaker.utils.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
@@ -44,27 +45,19 @@ class CreatePlaylistFragment : Fragment() {
 
                 Glide.with(this)
                     .load(it)
-                    .transform(CenterCrop(), RoundedCorners(8))
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(8.dpToPx(this))
+                    )
                     .into(binding.coverImageView)
             }
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         source = arguments?.getString("source")
-            ?: activity?.intent?.getStringExtra("source")
-
-        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (hasUnsavedChanges()) {
-                    showExitConfirmationDialog()
-                } else {
-                    closeScreen()
-                }
-            }
-        })
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,27 +98,42 @@ class CreatePlaylistFragment : Fragment() {
 
             closeScreen()
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (hasUnsavedChanges()) {
+                        showExitConfirmationDialog()
+                    } else {
+                        closeScreen()
+                    }
+                }
+            }
+        )
     }
 
     private fun showCreatedToast(name: String) {
         val layout = layoutInflater.inflate(R.layout.toast_playlist_created, null)
         val toastText = layout.findViewById<TextView>(R.id.toastText)
-        toastText.text = "Плейлист $name создан"
+        toastText.text = getString(R.string.playlist_created, name)
 
-        val toast = Toast(requireContext())
-        toast.duration = Toast.LENGTH_SHORT
-        toast.view = layout
-        toast.setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
+        val toast = Toast(requireContext()).apply {
+            duration = Toast.LENGTH_SHORT
+            view = layout
+            setGravity(Gravity.FILL_HORIZONTAL or Gravity.BOTTOM, 0, 0)
+        }
         toast.show()
     }
 
+
     private fun closeScreen() {
-        if (source == "player") {
-            requireActivity().finish()
-        } else {
-            findNavController().popBackStack()
+        when (source) {
+            "player" -> requireActivity().finish()
+            "library" -> findNavController().popBackStack()
+            else -> findNavController().popBackStack()
         }
     }
+
 
     private fun hasUnsavedChanges(): Boolean {
         return !binding.nameEditText.text.isNullOrBlank()
@@ -135,10 +143,10 @@ class CreatePlaylistFragment : Fragment() {
 
     private fun showExitConfirmationDialog() {
         AlertDialog.Builder(requireContext())
-            .setTitle("Завершить создание плейлиста?")
-            .setMessage("Все несохраненные данные будут потеряны")
-            .setNegativeButton("Отмена") { dialog, _ -> dialog.dismiss() }
-            .setPositiveButton("Завершить") { _, _ -> closeScreen() }
+            .setTitle(getString(R.string.dialog_exit_title))
+            .setMessage(getString(R.string.dialog_exit_message))
+            .setNegativeButton(getString(R.string.dialog_exit_negative)) { dialog, _ -> dialog.dismiss() }
+            .setPositiveButton(getString(R.string.dialog_exit_positive)) { _, _ -> closeScreen() }
             .show()
     }
 

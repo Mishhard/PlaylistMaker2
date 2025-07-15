@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.PlaylistAdapter
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
+import com.example.playlistmaker.library.data.dto.PlaylistDto
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -43,13 +44,15 @@ class PlaylistsFragment : Fragment() {
         binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvPlaylists.adapter = adapter
 
-        findNavController().navigate(
-            R.id.action_mediaLibraryFragment_to_createPlaylistFragment,
-            bundleOf("source" to "library")
-        )
+        binding.newPlaylistButton.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_mediaLibraryFragment_to_createPlaylistFragment,
+                bundleOf("source" to "library")
+            )
+        }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.playlists.collectLatest { playlists ->
+            viewModel.playlists.collectLatest { playlists: List<PlaylistDto> ->
                 if (playlists.isEmpty()) {
                     binding.emptyPlaceholder.visibility = View.VISIBLE
                     binding.rvPlaylists.visibility = View.GONE
@@ -61,6 +64,7 @@ class PlaylistsFragment : Fragment() {
             }
         }
 
+
         val verticalSpacing = resources.getDimensionPixelSize(R.dimen.item_vertical_spacing)
         val horizontalSpacing = resources.getDimensionPixelSize(R.dimen.item_horizontal_spacing)
 
@@ -70,11 +74,6 @@ class PlaylistsFragment : Fragment() {
 
 
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadPlaylists()
     }
 
     override fun onDestroyView() {

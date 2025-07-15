@@ -11,6 +11,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.library.data.dto.PlaylistDto
+import com.example.playlistmaker.utils.dpToPx
 
 class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
@@ -40,12 +41,19 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
 
         fun bind(playlist: PlaylistDto) {
             name.text = playlist.name
-            count.text = "${playlist.trackCount} треков"
+
+            val res = itemView.context.resources
+
+            count.text = res.getQuantityString(
+                R.plurals.track_count,
+                playlist.trackCount,
+                playlist.trackCount
+            )
 
             if (playlist.imagePath != null) {
                 Glide.with(itemView.context)
                     .load(playlist.imagePath)
-                    .transform(CenterCrop(), RoundedCorners(8))
+                    .transform(CenterCrop(), RoundedCorners(8.dpToPx(itemView.context)))
                     .placeholder(R.drawable.track_placeholder)
                     .into(cover)
             } else {

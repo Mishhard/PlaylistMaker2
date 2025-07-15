@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.library.data.dto.PlaylistDto
+import com.example.playlistmaker.utils.dpToPx
 
 class BottomSheetPlaylistsAdapter(
     private val onClick: (PlaylistDto) -> Unit
@@ -35,10 +36,16 @@ class BottomSheetPlaylistsAdapter(
 
         fun bind(playlist: PlaylistDto) {
             name.text = playlist.name
-            count.text = "${playlist.trackCount} трек(ов)"
+            val resources = itemView.resources
+            count.text = resources.getQuantityString(
+                R.plurals.track_count,
+                playlist.trackCount,
+                playlist.trackCount
+            )
             Glide.with(itemView)
                 .load(playlist.imagePath ?: R.drawable.track_placeholder)
-                .transform(CenterCrop(), RoundedCorners(8))
+                .transform(CenterCrop(), RoundedCorners(8.dpToPx(itemView))
+                )
                 .into(cover)
 
             itemView.setOnClickListener { onClick(playlist) }

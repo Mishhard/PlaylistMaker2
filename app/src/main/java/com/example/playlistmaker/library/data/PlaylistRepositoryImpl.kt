@@ -6,36 +6,40 @@ import com.example.playlistmaker.library.domain.db.PlaylistRepository
 import com.example.playlistmaker.player.domain.models.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.flow.Flow
 
 class PlaylistRepositoryImpl(
     private val playlistDao: PlaylistDao
 ) : PlaylistRepository {
 
-    override suspend fun createPlaylist(name: String, description: String?, imagePath: String?) {
+    override suspend fun createPlaylist(
+        name: String,
+        description: String?,
+        imagePath: String?
+    ) {
         val playlist = PlaylistEntity(
             name = name,
             description = description,
-            imagePath = imagePath
+            imagePath = imagePath,
+            trackIds = "[]",
+            trackCount = 0
         )
         playlistDao.insert(playlist)
     }
 
-    override suspend fun getPlaylists(): List<PlaylistEntity> {
+    override fun getPlaylists(): Flow<List<PlaylistEntity>> {
         return playlistDao.getAllPlaylists()
     }
 
-    override suspend fun addTrackToPlaylist(track: Track, playlistId: Long): String {
-        val playlist = playlistDao.getPlaylistById(playlistId)
-            ?: return "Плейлист не найден"
+    override suspend fun addTrackToPlaylist(track: Track, playlistId: Long): Boolean {
+        val playlist = playlistDao.getPlaylistById(playlistId) ?: return false
 
         val gson = Gson()
-        val listType = object : TypeToken<List<Int>>() {}.type
+        val listType = object : TypeToken<MutableList<Int>>() {}.type
         val trackIds: MutableList<Int> =
             gson.fromJson(playlist.trackIds, listType) ?: mutableListOf()
 
-        if (trackIds.contains(track.trackId)) {
-            return "Трек уже есть в плейлисте"
-        }
+        if (trackIds.contains(track.trackId)) return false
 
         trackIds.add(track.trackId)
 
@@ -45,6 +49,7 @@ class PlaylistRepositoryImpl(
         )
         playlistDao.updatePlaylist(updatedPlaylist)
 
-        return "Добавлено в ${playlist.name}"
+        return true
     }
+
 }

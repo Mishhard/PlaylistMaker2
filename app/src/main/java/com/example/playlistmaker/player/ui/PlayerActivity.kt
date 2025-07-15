@@ -24,6 +24,7 @@ import com.example.playlistmaker.common.BottomSheetPlaylistsAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.playlistmaker.main.ui.MainActivity
+import com.example.playlistmaker.utils.dpToPx
 
 class PlayerActivity : BaseActivity() {
 
@@ -90,7 +91,8 @@ class PlayerActivity : BaseActivity() {
 
         Glide.with(this)
             .load(track.getFullCover())
-            .transform(RoundedCorners(16))
+            .transform(RoundedCorners(8.dpToPx(this))
+            )
             .placeholder(R.drawable.track_placeholder)
             .into(ivCover)
 
@@ -110,7 +112,7 @@ class PlayerActivity : BaseActivity() {
             findViewById<TextView>(R.id.album_value).visibility = View.GONE
         }
 
-        viewModel.setCurrentTrack(track)
+        viewModel.updateCurrentTrack(track)
         viewModel.state.observe(this) { st ->
             when (st) {
                 is PlayerState.Liked -> ivLike.setImageResource(R.drawable.like_active)
@@ -153,8 +155,8 @@ class PlayerActivity : BaseActivity() {
         findViewById<Button>(R.id.button_new_playlist).setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-            val intent = Intent(this, MainActivity::class.java).apply {
-                putExtra("openCreatePlaylist", true)
+            val intent = Intent(this, SingleFragmentHostActivity::class.java).apply {
+                putExtra("fragment", "createPlaylist")
                 putExtra("source", "player")
             }
             startActivity(intent)
@@ -178,9 +180,20 @@ class PlayerActivity : BaseActivity() {
         String.format("%02d:%02d", ms / 60000, (ms / 1000) % 60)
 
     private fun addTrackToPlaylist(playlist: PlaylistDto) {
-        viewModel.addTrackToPlaylist(playlist) { message ->
+        viewModel.addTrackToPlaylist(playlist) { added ->
+            val message = if (added) {
+                getString(R.string.added_to_playlist, playlist.name)
+            } else {
+                getString(R.string.track_already_in_playlist, playlist.name)
+            }
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
     }
+
+
+
+
+
+
+
 }
