@@ -1,34 +1,37 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    style="@style/LinearLayout"
-    android:background="?attr/settingsBackgroundColor">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="?attr/settingsBackgroundColor"
+    android:paddingStart="@dimen/main_padding"
+    android:paddingEnd="@dimen/main_padding"
+    android:paddingBottom="0dp"
+    android:paddingTop="@dimen/main_padding"
+    android:clipToPadding="false">
+    >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            style="@style/TextView"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/media_library"
-            android:textColor="?attr/primaryTextColor" />
+            android:orientation="horizontal">
+
+            <TextView
+                style="@style/TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/media_library"
+                android:textColor="?attr/primaryTextColor" />
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            style="@style/TabLabelText"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"/>
     </LinearLayout>
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_marginTop="10dp"
-
-        style="@style/TabLabelText"
-        android:layout_width="match_parent" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
-</LinearLayout>

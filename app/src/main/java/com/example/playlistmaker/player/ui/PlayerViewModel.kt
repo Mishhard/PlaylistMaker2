@@ -4,6 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.library.data.dto.PlaylistDto
+import com.example.playlistmaker.library.domain.api.PlaylistInteractor
 import com.example.playlistmaker.library.domain.db.FavoriteTracksRepository
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.models.Track
@@ -14,7 +16,8 @@ import kotlinx.coroutines.launch
 
 class PlayerViewModel(
     private val interactor: PlayerInteractor,
-    private val favoriteTracksRepository: FavoriteTracksRepository
+    private val favoriteTracksRepository: FavoriteTracksRepository,
+    private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
 
     private val _state = MutableLiveData<PlayerState>()
@@ -27,6 +30,9 @@ class PlayerViewModel(
 
     private var currentTrack: Track? = null
     private var isFavorite: Boolean = false
+
+    private val _playlists = MutableLiveData<List<PlaylistDto>>()
+    val playlists: LiveData<List<PlaylistDto>> = _playlists
 
     fun prepare(url: String) {
         _state.value = PlayerState.Loading
@@ -99,4 +105,20 @@ class PlayerViewModel(
             if (isFavorite) PlayerState.Liked else PlayerState.NotLiked
         )
     }
+
+    fun loadPlaylists() {
+        viewModelScope.launch {
+            _playlists.value = playlistInteractor.getPlaylists()
+        }
+    }
+
+    fun addTrackToPlaylist(playlist: PlaylistDto, onResult: (String) -> Unit) {
+        val track = currentTrack ?: return
+        viewModelScope.launch {
+            val result = playlistInteractor.addTrackToPlaylist(track, playlist)
+            onResult(result)
+            loadPlaylists()
+        }
+    }
+
 }

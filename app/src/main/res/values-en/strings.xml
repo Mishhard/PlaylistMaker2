@@ -23,4 +23,9 @@
     <string name="you_have_not_created_any_playlists">Вы не создали ни одного плейлиста</string>
     <string name="player">Плеер</string>
     <string name="there_are_no_favorite_tracks">There are no favorite tracks</string>
+    <string name="playlist_title">Title*</string>
+    <string name="playlist_description">Description</string>
+    <string name="create">Create</string>
+    <string name="add_to_playlist">Add to playlist</string>
+
 </resources>
