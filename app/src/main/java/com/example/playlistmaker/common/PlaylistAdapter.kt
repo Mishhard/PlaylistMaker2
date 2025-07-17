@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -13,7 +14,9 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.library.data.dto.PlaylistDto
 import com.example.playlistmaker.utils.dpToPx
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
+class PlaylistAdapter(
+    private val onPlaylistClick: (PlaylistDto) -> Unit
+) : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
     private var items: List<PlaylistDto> = emptyList()
 
@@ -29,7 +32,11 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(items[position])
+        val playlist = items[position]
+        holder.bind(playlist)
+        holder.itemView.setOnClickListener {
+            onPlaylistClick(playlist)
+        }
     }
 
     override fun getItemCount(): Int = items.size

@@ -25,18 +25,19 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
 
-    private val resultsAdapter = TracksAdapter().apply {
-        setOnItemClickListener { trackUiModel  ->
-            viewModel.saveTrack(trackUiModel.toDomain() )
-            openPlayer(trackUiModel.toDomain() )
+    private val resultsAdapter = TracksAdapter(
+        onTrackClick = { trackUiModel ->
+            viewModel.saveTrack(trackUiModel.toDomain())
+            openPlayer(trackUiModel)
         }
-    }
-    private val historyAdapter = TracksAdapter().apply {
-        setOnItemClickListener { trackUiModel  ->
-            viewModel.onTrackClicked(trackUiModel.toDomain() )
-            openPlayer(trackUiModel.toDomain() )
+    )
+
+    private val historyAdapter = TracksAdapter(
+        onTrackClick = { trackUiModel ->
+            viewModel.onTrackClicked(trackUiModel.toDomain())
+            openPlayer(trackUiModel)
         }
-    }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -88,8 +89,7 @@ class SearchFragment : Fragment() {
 
         binding.clearButton.setOnClickListener {
             binding.searchEditText.text?.clear()
-            resultsAdapter.tracks.clear()
-            resultsAdapter.notifyDataSetChanged()
+            resultsAdapter.submitList(emptyList())
             viewModel.onQueryChanged("")
         }
         binding.retryButton.setOnClickListener {
@@ -100,10 +100,9 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun openPlayer(domainTrack: DomainTrack) {
-        val uiModel = TrackUiModel.fromDomain(domainTrack, isFavorite = false)
+    private fun openPlayer(track: TrackUiModel) {
         startActivity(Intent(requireContext(), PlayerActivity::class.java).apply {
-            putExtra(PlayerActivity.EXTRA_TRACK, uiModel)
+            putExtra(PlayerActivity.EXTRA_TRACK, track)
         })
     }
 
@@ -119,17 +118,16 @@ class SearchFragment : Fragment() {
         binding.placeholderContainer.isVisible = false
         binding.searchHistoryContainer.isVisible = false
         binding.rvTracks.isVisible = true
-        resultsAdapter.tracks = ArrayList(list)
-        resultsAdapter.notifyDataSetChanged()
+        resultsAdapter.submitList(list)
     }
+
 
     private fun showHistory(list: List<TrackUiModel>) {
         binding.progressBar.isVisible = false
         binding.placeholderContainer.isVisible = false
         binding.rvTracks.isVisible = false
         binding.searchHistoryContainer.isVisible = list.isNotEmpty()
-        historyAdapter.tracks = ArrayList(list)
-        historyAdapter.notifyDataSetChanged()
+        historyAdapter.submitList(list)
     }
 
     private fun showEmpty(message: String) {

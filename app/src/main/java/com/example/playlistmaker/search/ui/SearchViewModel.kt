@@ -1,4 +1,3 @@
-// SearchViewModel.kt
 package com.example.playlistmaker.search.ui
 
 import androidx.lifecycle.LiveData

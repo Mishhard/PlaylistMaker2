@@ -3,6 +3,10 @@
         <item quantity="one">%d track</item>
         <item quantity="other">%d tracks</item>
     </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
     <string name="app_name">Playlist Maker</string>
     <string name="search">Search</string>
     <string name="media_library">Library</string>
@@ -17,15 +21,15 @@
     <string name="retry">Retry</string>
     <string name="clear_history">Clear history</string>
     <string name="you_searched">You searched</string>
-    <string name="Country">Страна</string>
-    <string name="Genre">Жанр</string>
-    <string name="Year">Год</string>
-    <string name="Album">Альбом</string>
-    <string name="Duration">Длительность</string>
-    <string name="new_playlist">Новый плейлист</string>
-    <string name="your_media_library_is_empty">Ваша медиатека пуста</string>
-    <string name="you_have_not_created_any_playlists">Вы не создали ни одного плейлиста</string>
-    <string name="player">Плеер</string>
+    <string name="Country">Country</string>
+    <string name="Genre">Genre</string>
+    <string name="Year">Year</string>
+    <string name="Album">Album</string>
+    <string name="Duration">Duration</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="your_media_library_is_empty">Your media library is empty</string>
+    <string name="you_have_not_created_any_playlists">You have not created any playlists</string>
+    <string name="player">Player</string>
     <string name="there_are_no_favorite_tracks">There are no favorite tracks</string>
     <string name="playlist_title">Title*</string>
     <string name="playlist_description">Description</string>
@@ -38,4 +42,19 @@
     <string name="dialog_exit_message">All unsaved data will be lost</string>
     <string name="dialog_exit_negative">Cansel</string>
     <string name="dialog_exit_positive">Finish</string>
+    <string name="no_tracks_message">There are no tracks in this playlist</string>
+    <string name="share">Share</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="delete_playlist_confirm">Do you want to delete the playlist?</string>
+    <string name="cancel">Cancel</string>
+    <string name="empty_playlist_error">You have not created any playlists</string>
+    <string name="playlist">"Playlist %1$s"</string>
+    <string name="save">Save</string>
+    <string name="favorites_tracks">Favorite tracks</string>
+    <string name="playlists">Playlists</string>
+    <string name="delete_track_title">Do you want to delete the track?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 </resources>

@@ -13,6 +13,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import com.example.playlistmaker.player.ui.models.TrackUiModel
 
 class PlayerViewModel(
     private val interactor: PlayerInteractor,
@@ -27,12 +28,44 @@ class PlayerViewModel(
     val positionLiveData: LiveData<Int> = _position
 
     private var posJob: Job? = null
-
-    var currentTrack: Track? = null
     private var isFavorite: Boolean = false
 
-    private val _playlists = MutableLiveData<List<PlaylistDto>>()
-    val playlists: LiveData<List<PlaylistDto>> = _playlists
+    var currentTrack: Track? = null
+
+    fun updateCurrentTrack(track: Track) {
+        currentTrack = track
+        checkIsFavorite()
+    }
+
+    private fun checkIsFavorite() {
+        viewModelScope.launch {
+            currentTrack?.let { track ->
+                isFavorite = favoriteTracksRepository.isFavorite(track.trackId)
+                updateLikeIcon()
+            }
+        }
+    }
+
+    fun toggleFavorite() {
+        currentTrack?.let { track ->
+            viewModelScope.launch {
+                if (isFavorite) {
+                    favoriteTracksRepository.removeFromFavorites(track.trackId)
+                    isFavorite = false
+                } else {
+                    favoriteTracksRepository.addToFavorites(track)
+                    isFavorite = true
+                }
+                updateLikeIcon()
+            }
+        }
+    }
+
+    private fun updateLikeIcon() {
+        _state.postValue(
+            if (isFavorite) PlayerState.Liked else PlayerState.NotLiked
+        )
+    }
 
     fun prepare(url: String) {
         _state.value = PlayerState.Loading
@@ -71,40 +104,8 @@ class PlayerViewModel(
 
     fun isPlaying(): Boolean = interactor.isPlaying()
 
-    fun updateCurrentTrack(track: Track) {
-        currentTrack = track
-        checkIsFavorite()
-    }
-
-    private fun checkIsFavorite() {
-        viewModelScope.launch {
-            currentTrack?.let { track ->
-                isFavorite = favoriteTracksRepository.isFavorite(track.trackId)
-                updateLikeIcon()
-            }
-        }
-    }
-
-    fun toggleFavorite() {
-        currentTrack?.let { track ->
-            viewModelScope.launch {
-                if (isFavorite) {
-                    favoriteTracksRepository.removeFromFavorites(track.trackId)
-                    isFavorite = false
-                } else {
-                    favoriteTracksRepository.addToFavorites(track)
-                    isFavorite = true
-                }
-                updateLikeIcon()
-            }
-        }
-    }
-
-    private fun updateLikeIcon() {
-        _state.postValue(
-            if (isFavorite) PlayerState.Liked else PlayerState.NotLiked
-        )
-    }
+    private val _playlists = MutableLiveData<List<PlaylistDto>>()
+    val playlists: LiveData<List<PlaylistDto>> = _playlists
 
     fun loadPlaylists() {
         viewModelScope.launch {
@@ -114,7 +115,6 @@ class PlayerViewModel(
         }
     }
 
-
     fun addTrackToPlaylist(playlist: PlaylistDto, onResult: (Boolean) -> Unit) {
         val track = currentTrack ?: return
         viewModelScope.launch {
@@ -123,7 +123,5 @@ class PlayerViewModel(
             loadPlaylists()
         }
     }
-
-
-
 }
+

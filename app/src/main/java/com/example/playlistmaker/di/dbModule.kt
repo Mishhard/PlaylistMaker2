@@ -19,4 +19,5 @@ val dbModule = module {
 
     single { get<AppDatabase>().trackDao() }
     single { get<AppDatabase>().playlistDao() }
+    single { get<AppDatabase>().favoriteTrackDao() }
 }

@@ -12,12 +12,18 @@ interface PlaylistDao {
     @Insert
     suspend fun insert(playlist: PlaylistEntity)
 
-    @Query("SELECT * FROM playlists")
+    @Query("SELECT * FROM playlists ORDER BY id DESC")
     fun getAllPlaylists(): Flow<List<PlaylistEntity>>
 
     @Query("SELECT * FROM playlists WHERE id = :playlistId LIMIT 1")
     suspend fun getPlaylistById(playlistId: Long): PlaylistEntity?
 
+    @Query("SELECT * FROM playlists ORDER BY id DESC")
+    suspend fun getAllPlaylistsOnce(): List<PlaylistEntity>
+
     @Update
     suspend fun updatePlaylist(playlist: PlaylistEntity)
+
+    @Query("DELETE FROM playlists WHERE id = :playlistId")
+    suspend fun deletePlaylist(playlistId: Long)
 }

@@ -36,13 +36,13 @@ class FavoriteTracksFragment : Fragment() {
     private var _binding: FragmentFavoriteTracksBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter = TracksAdapter().apply {
-        setOnItemClickListener { trackUiModel ->
+    private val adapter = TracksAdapter(
+        onTrackClick = { trackUiModel ->
             val intent = Intent(requireContext(), PlayerActivity::class.java)
             intent.putExtra(PlayerActivity.EXTRA_TRACK, trackUiModel)
             startActivity(intent)
         }
-    }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,8 +79,7 @@ class FavoriteTracksFragment : Fragment() {
                         is FavoritesState.Content -> {
                             binding.rvFavorites.isVisible = true
                             binding.placeholderContainer.isVisible = false
-                            adapter.tracks = ArrayList(state.tracks)
-                            adapter.notifyDataSetChanged()
+                            adapter.submitList(state.tracks)
                         }
                     }
                 }

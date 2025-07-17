@@ -48,13 +48,17 @@ class PlayerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        val uiModel: TrackUiModel? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("track", TrackUiModel::class.java)
+        val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_TRACK, TrackUiModel::class.java)
         } else {
             @Suppress("DEPRECATION")
-            intent.getParcelableExtra<TrackUiModel>("track")
+            intent.getParcelableExtra<TrackUiModel>(EXTRA_TRACK)
         }
-        val track = uiModel?.toDomain() ?: return
+
+        if (track == null) {
+            finish()
+            return
+        }
 
         ivCover = findViewById(R.id.track_cover)
         ivPlay = findViewById(R.id.play)
@@ -91,17 +95,12 @@ class PlayerActivity : BaseActivity() {
 
         Glide.with(this)
             .load(track.getFullCover())
-            .transform(RoundedCorners(8.dpToPx(this))
-            )
+            .transform(RoundedCorners(8.dpToPx(this)))
             .placeholder(R.drawable.track_placeholder)
             .into(ivCover)
 
-        findViewById<TextView>(R.id.track_name).text = track.trackName
-        findViewById<TextView>(R.id.artist_name).text = track.artistName
-        findViewById<TextView>(R.id.duration_value).text = track.getFormattedTime()
         findViewById<TextView>(R.id.year_value).text = track.getReleaseYear()
-        findViewById<TextView>(R.id.genre_value).text = track.primaryGenreName
-        findViewById<TextView>(R.id.country_value).text = track.country
+        findViewById<TextView>(R.id.duration_value).text = track.getFormattedTime()
 
         tvTimer.text = track.getFormattedTime()
 
@@ -112,7 +111,8 @@ class PlayerActivity : BaseActivity() {
             findViewById<TextView>(R.id.album_value).visibility = View.GONE
         }
 
-        viewModel.updateCurrentTrack(track)
+        viewModel.updateCurrentTrack(track.toDomain())
+
         viewModel.state.observe(this) { st ->
             when (st) {
                 is PlayerState.Liked -> ivLike.setImageResource(R.drawable.like_active)
@@ -139,6 +139,7 @@ class PlayerActivity : BaseActivity() {
         }
         ivLike.setOnClickListener { viewModel.toggleFavorite() }
         ivBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+
         viewModel.prepare(track.previewUrl)
 
         playlistsAdapter = BottomSheetPlaylistsAdapter { playlist ->
@@ -155,12 +156,12 @@ class PlayerActivity : BaseActivity() {
         findViewById<Button>(R.id.button_new_playlist).setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-            val intent = Intent(this, SingleFragmentHostActivity::class.java).apply {
-                putExtra("fragment", "createPlaylist")
-                putExtra("source", "player")
+            val intent = Intent(this, PlayerActivity::class.java).apply {
+                putExtra(PlayerActivity.EXTRA_TRACK, track)
             }
             startActivity(intent)
         }
+
 
 
 

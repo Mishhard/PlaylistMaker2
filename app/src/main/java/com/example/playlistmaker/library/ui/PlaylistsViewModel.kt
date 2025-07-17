@@ -12,7 +12,6 @@ class PlaylistsViewModel(
     private val interactor: PlaylistInteractor
 ) : ViewModel() {
 
-    // Просто поток плейлистов
     val playlists: StateFlow<List<PlaylistDto>> =
         interactor.getPlaylists()
             .stateIn(
