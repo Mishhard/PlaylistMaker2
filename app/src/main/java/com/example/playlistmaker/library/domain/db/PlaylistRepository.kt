@@ -10,8 +10,10 @@ interface PlaylistRepository {
     suspend fun createPlaylist(name: String, description: String?, imagePath: String?)
     fun getPlaylists(): Flow<List<PlaylistEntity>>
     suspend fun addTrackToPlaylist(track: Track, playlistId: Long): Boolean
-    suspend fun getPlaylistById(id: Long): PlaylistDto?    suspend fun deletePlaylist(id: Long)
+    suspend fun getPlaylistById(id: Long): PlaylistEntity?
+    suspend fun deletePlaylist(id: Long)
     suspend fun getTracksForPlaylist(trackIds: List<Int>): List<TrackEntity>
     suspend fun updatePlaylist(id: Long, name: String, description: String?, imagePath: String?)
     suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Int)
 }
+

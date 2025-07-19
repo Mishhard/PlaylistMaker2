@@ -5,19 +5,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.library.domain.db.PlaylistRepository
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.library.data.dto.PlaylistDto
+import com.example.playlistmaker.library.domain.models.Playlist
 import kotlinx.coroutines.launch
+import com.example.playlistmaker.library.data.db.entity.toDomain
+
 
 class CreatePlaylistViewModel(private val repository: PlaylistRepository) : ViewModel() {
-    private val _playlist = MutableLiveData<PlaylistDto>()
-    val playlist: LiveData<PlaylistDto> get() = _playlist
+    private val _playlist = MutableLiveData<Playlist>()
+    val playlist: LiveData<Playlist> get() = _playlist
+
 
     private val _playlistUpdated = MutableLiveData<Boolean>()
     val playlistUpdated: LiveData<Boolean> get() = _playlistUpdated
 
     fun loadPlaylist(id: Long) {
         viewModelScope.launch {
-            repository.getPlaylistById(id)?.let { _playlist.postValue(it) }
+            repository.getPlaylistById(id)?.let { dto ->
+                _playlist.postValue(dto.toDomain())
+            }
         }
     }
 

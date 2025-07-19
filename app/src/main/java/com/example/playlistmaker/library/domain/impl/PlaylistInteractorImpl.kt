@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import com.example.playlistmaker.player.ui.models.TrackUiModel
 import com.example.playlistmaker.library.data.db.entity.toUiModel
-import com.example.playlistmaker.library.data.db.entity.toDto
 
 class PlaylistInteractorImpl(
     private val repository: PlaylistRepository
@@ -41,7 +40,7 @@ class PlaylistInteractorImpl(
     }
 
     override suspend fun getPlaylistById(id: Long): PlaylistDto? {
-        return repository.getPlaylistById(id)
+        return repository.getPlaylistById(id)?.toDto()
     }
 
     override suspend fun deletePlaylist(id: Long) {
@@ -49,8 +48,11 @@ class PlaylistInteractorImpl(
     }
 
     override suspend fun getTracksForPlaylist(playlistId: Long): List<TrackUiModel> {
+        val gson = Gson()
         val playlist = repository.getPlaylistById(playlistId) ?: return emptyList()
-        val trackEntities = repository.getTracksForPlaylist(playlist.trackIds)
+        val ids = gson.fromJson<List<Int>>(playlist.trackIds, object : TypeToken<List<Int>>() {}.type) ?: emptyList()
+        val trackEntities = repository.getTracksForPlaylist(ids)
+
         return trackEntities.map { it.toUiModel() }
     }
 

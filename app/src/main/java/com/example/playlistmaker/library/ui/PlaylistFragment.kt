@@ -1,6 +1,5 @@
 package com.example.playlistmaker.library.ui
 
-import android.R.attr.track
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -65,27 +64,22 @@ class PlaylistFragment : Fragment() {
             adapter = tracksAdapter
         }
 
-        binding.playlistTracksRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = tracksAdapter
-        }
-
         setupBottomSheets()
         setupMenuActions()
 
         viewModel.playlist.observe(viewLifecycleOwner) { playlist ->
-            binding.playlistTitle.text = playlist.name
-            binding.playlistDescription.text = playlist.description ?: ""
-            binding.menuPlaylistName.text = playlist.name
+            binding.playlistTitle.text = playlist?.name
+            binding.playlistDescription.text = playlist?.description ?: ""
+            binding.menuPlaylistName.text = playlist?.name
 
-            if (playlist.imagePath != null) {
+            if (playlist?.imagePath != null) {
                 Glide.with(this)
-                    .load(playlist.imagePath)
+                    .load(playlist?.imagePath)
                     .placeholder(R.drawable.track_placeholder)
                     .into(binding.playlistCover)
 
                 Glide.with(this)
-                    .load(playlist.imagePath)
+                    .load(playlist?.imagePath)
                     .transform(CenterCrop(), RoundedCorners(8.dpToPx(this)))
                     .placeholder(R.drawable.track_placeholder)
                     .into(binding.menuCoverImage)
@@ -96,13 +90,10 @@ class PlaylistFragment : Fragment() {
         }
 
         viewModel.tracks.observe(viewLifecycleOwner) { tracks ->
-            if (tracks.isEmpty()) {
-                binding.emptyMessage.visibility = View.VISIBLE
-                binding.playlistTracksRecyclerView.visibility = View.GONE
-            } else {
-                binding.emptyMessage.visibility = View.GONE
-                binding.playlistTracksRecyclerView.visibility = View.VISIBLE
-            }
+            binding.emptyMessage.visibility =
+                if (tracks.isEmpty()) View.VISIBLE else View.GONE
+            binding.playlistTracksRecyclerView.visibility =
+                if (tracks.isEmpty()) View.GONE else View.VISIBLE
 
             tracksAdapter.submitList(tracks)
 
@@ -112,6 +103,18 @@ class PlaylistFragment : Fragment() {
 
             binding.playlistTracksInfo.text = "$countText · $totalDuration"
             binding.menuPlaylistTrackCount.text = countText
+        }
+
+        viewModel.shareEvent.observe(viewLifecycleOwner) { shareText ->
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, shareText)
+            }
+            startActivity(Intent.createChooser(intent, getString(R.string.share)))
+        }
+
+        viewModel.errorEvent.observe(viewLifecycleOwner) { errorResId ->
+            Toast.makeText(requireContext(), errorResId, Toast.LENGTH_SHORT).show()
         }
 
         viewModel.loadPlaylist(playlistId)
@@ -141,20 +144,20 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun setupMenuActions() {
+        binding.shareButton.setOnClickListener {
+            viewModel.sharePlaylist()
+        }
+
         binding.menuButton.setOnClickListener {
             bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_EXPANDED
         }
 
-        binding.shareButton.setOnClickListener {
-            sharePlaylist()
-        }
-
-        binding.overlay.setOnClickListener {
+        binding.menuItemShare.setOnClickListener {
+            viewModel.sharePlaylist()
             bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
-        binding.menuItemShare.setOnClickListener {
-            sharePlaylist()
+        binding.overlay.setOnClickListener {
             bottomSheetBehaviorMenu.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
@@ -194,41 +197,6 @@ class PlaylistFragment : Fragment() {
         )
     }
 
-    private fun sharePlaylist() {
-        val playlist = viewModel.playlist.value
-        val tracks = viewModel.tracks.value ?: emptyList()
-
-        if (playlist == null || tracks.isEmpty()) {
-            Toast.makeText(requireContext(), R.string.empty_playlist_error, Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val shareText = buildString {
-            append(getString(R.string.playlist, playlist.name))
-            if (!playlist.description.isNullOrBlank()) {
-                append("\n${playlist.description}")
-            }
-            append("\n\n")
-            val trackCountText = resources.getQuantityString(
-                R.plurals.track_count,
-                tracks.size,
-                tracks.size
-            )
-            append("$trackCountText:\n\n")
-
-
-            tracks.forEachIndexed { index, track ->
-                append("${index + 1}. ${track.artistName} - ${track.trackName} (${track.getFormattedTime()})\n")
-            }
-        }
-
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, shareText)
-        }
-        startActivity(Intent.createChooser(shareIntent, ""))
-    }
-
     override fun onDestroyView() {
         if (::bottomSheetBehaviorMenu.isInitialized && ::bottomSheetCallback.isInitialized) {
             bottomSheetBehaviorMenu.removeBottomSheetCallback(bottomSheetCallback)
@@ -254,7 +222,6 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-
     private fun openPlayer(track: TrackUiModel) {
         val intent = Intent(requireContext(), PlayerActivity::class.java).apply {
             putExtra(PlayerActivity.EXTRA_TRACK, track)
@@ -271,6 +238,4 @@ class PlaylistFragment : Fragment() {
             }
             .show()
     }
-
-
 }

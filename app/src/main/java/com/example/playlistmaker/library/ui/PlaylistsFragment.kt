@@ -51,10 +51,8 @@ class PlaylistsFragment : Fragment() {
         binding.rvPlaylists.adapter = adapter
 
         binding.newPlaylistButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_mediaLibraryFragment_to_createPlaylistFragment,
-                bundleOf("source" to "library")
-            )
+            findNavController().navigate(R.id.action_mediaLibraryFragment_to_createPlaylistFragment)
+
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {

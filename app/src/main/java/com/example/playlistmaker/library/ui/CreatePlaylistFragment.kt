@@ -22,6 +22,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.example.playlistmaker.utils.dpToPx
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
@@ -37,7 +38,9 @@ class CreatePlaylistFragment : Fragment() {
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: CreatePlaylistViewModel by viewModel()
+    private val viewModel: CreatePlaylistViewModel by viewModel {
+        parametersOf(arguments?.getLong(ARG_PLAYLIST_ID, -1L))
+    }
 
     private var selectedImageUri: Uri? = null
     private var source: String? = null

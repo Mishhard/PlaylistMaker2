@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:fitsSystemWindows="false"
+    android:background="?attr/settingsBackgroundColor"
 >
 
     <androidx.fragment.app.FragmentContainerView
@@ -20,6 +21,7 @@
         app:navGraph="@navigation/nav_graph" />
 
     <View
+        android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/light_light_gray" />

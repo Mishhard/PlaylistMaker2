@@ -9,8 +9,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
 import com.example.playlistmaker.library.data.db.entity.TrackEntity
-import com.example.playlistmaker.library.data.dto.PlaylistDto
-import com.example.playlistmaker.library.data.db.entity.toDto
 
 class PlaylistRepositoryImpl(
     private val playlistDao: PlaylistDao,
@@ -74,9 +72,8 @@ class PlaylistRepositoryImpl(
         return true
     }
 
-
-    override suspend fun getPlaylistById(id: Long): PlaylistDto? {
-        return playlistDao.getPlaylistById(id)?.toDto()
+    override suspend fun getPlaylistById(id: Long): PlaylistEntity? {
+        return playlistDao.getPlaylistById(id)
     }
 
     override suspend fun deletePlaylist(id: Long) {
@@ -95,15 +92,6 @@ class PlaylistRepositoryImpl(
             trackDao.clearAllTracks()
         } else {
             trackDao.deleteTracksNotInIds(usedTrackIds.toList())
-        }
-    }
-
-
-    suspend fun safeDeleteUnusedTracks(trackDao: TrackDao, usedIds: List<Int>) {
-        if (usedIds.isEmpty()) {
-            trackDao.clearAllTracks()
-        } else {
-            trackDao.deleteTracksNotInIds(usedIds)
         }
     }
 
@@ -133,13 +121,28 @@ class PlaylistRepositoryImpl(
         val type = object : TypeToken<MutableList<Int>>() {}.type
         val trackIds: MutableList<Int> = gson.fromJson(playlist.trackIds, type) ?: mutableListOf()
 
+        var removed = false
         if (trackIds.remove(trackId)) {
             val updatedPlaylist = playlist.copy(
                 trackIds = gson.toJson(trackIds),
                 trackCount = trackIds.size
             )
             playlistDao.updatePlaylist(updatedPlaylist)
+            removed = true
+        }
+
+        if (removed) {
+            val allPlaylists = playlistDao.getAllPlaylistsOnce()
+            val stillUsed = allPlaylists.any { pl ->
+                val ids: List<Int> = gson.fromJson(pl.trackIds, type) ?: emptyList()
+                ids.contains(trackId)
+            }
+
+            if (!stillUsed) {
+                trackDao.deleteTrackById(trackId)
+            }
         }
     }
+
 
 }

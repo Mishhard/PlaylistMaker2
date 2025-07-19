@@ -1,6 +1,7 @@
 package com.example.playlistmaker.library.data.dto
 
 import com.example.playlistmaker.library.data.db.entity.PlaylistEntity
+import com.example.playlistmaker.library.domain.models.Playlist
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -39,3 +40,15 @@ fun PlaylistDto.toEntity(): PlaylistEntity {
         trackCount = trackCount
     )
 }
+
+fun PlaylistDto.toDomain(): Playlist {
+    return Playlist(
+        id = this.id,
+        name = this.name,
+        description = this.description,
+        imagePath = this.imagePath,
+        trackIds = this.trackIds,
+        trackCount = this.trackCount
+    )
+}
+

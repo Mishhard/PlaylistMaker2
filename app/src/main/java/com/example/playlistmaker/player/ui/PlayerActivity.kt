@@ -99,6 +99,12 @@ class PlayerActivity : BaseActivity() {
             .placeholder(R.drawable.track_placeholder)
             .into(ivCover)
 
+        val trackNameView = findViewById<TextView>(R.id.track_name)
+        val artistNameView = findViewById<TextView>(R.id.artist_name)
+
+        trackNameView.text = track.trackName
+        artistNameView.text = track.artistName
+
         findViewById<TextView>(R.id.year_value).text = track.getReleaseYear()
         findViewById<TextView>(R.id.duration_value).text = track.getFormattedTime()
 
@@ -156,8 +162,9 @@ class PlayerActivity : BaseActivity() {
         findViewById<Button>(R.id.button_new_playlist).setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-            val intent = Intent(this, PlayerActivity::class.java).apply {
-                putExtra(PlayerActivity.EXTRA_TRACK, track)
+            val intent = Intent(this, SingleFragmentHostActivity::class.java).apply {
+                putExtra("fragment", "createPlaylist")
+                putExtra("source", "player")
             }
             startActivity(intent)
         }
