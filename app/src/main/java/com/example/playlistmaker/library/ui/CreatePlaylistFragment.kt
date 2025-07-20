@@ -6,11 +6,14 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -81,6 +84,41 @@ class CreatePlaylistFragment : Fragment() {
             viewModel.loadPlaylist(playlistId)
         }
 
+        ViewCompat.setOnApplyWindowInsetsListener(binding.createPlaylistScrollView) { v, insets ->
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val sysInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val bottomInset = maxOf(imeInsets.bottom, sysInsets.bottom)
+
+            v.setPadding(0, 0, 0, bottomInset)
+
+            if (imeInsets.bottom > 0) {
+                v.post {
+                    val focused = requireActivity().currentFocus
+                    if (focused != null) {
+                        val scrollView = v as? androidx.core.widget.NestedScrollView
+
+                        val coords = IntArray(2)
+                        focused.getLocationOnScreen(coords)
+                        val focusY = coords[1]
+
+                        val scrollCoords = IntArray(2)
+                        scrollView?.getLocationOnScreen(scrollCoords)
+                        val scrollY = scrollCoords[1]
+
+                        val offset = focusY - scrollY
+
+                        val safeOffset = offset - 100
+
+                        scrollView?.smoothScrollTo(0, safeOffset.coerceAtLeast(0))
+                    }
+                }
+            }
+
+            insets
+        }
+
+
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -93,6 +131,7 @@ class CreatePlaylistFragment : Fragment() {
             }
         )
     }
+
 
     private fun setupUI() {
         binding.coverContainer.setOnClickListener { galleryLauncher.launch("image/*") }
@@ -198,6 +237,23 @@ class CreatePlaylistFragment : Fragment() {
         outputStream.close()
         return file.absolutePath
     }
+
+    fun View.listenKeyboardVisibility(onChanged: (isVisible: Boolean, keyboardHeight: Int) -> Unit) {
+        val rootView = this
+        var lastHeight = 0
+        rootView.viewTreeObserver.addOnGlobalLayoutListener {
+            val rect = android.graphics.Rect()
+            rootView.getWindowVisibleDisplayFrame(rect)
+            val screenHeight = rootView.rootView.height
+            val keypadHeight = screenHeight - rect.bottom
+            val isVisible = keypadHeight > screenHeight * 0.15
+            if (keypadHeight != lastHeight) {
+                lastHeight = keypadHeight
+                onChanged(isVisible, keypadHeight)
+            }
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

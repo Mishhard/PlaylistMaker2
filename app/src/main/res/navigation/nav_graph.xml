@@ -54,3 +54,4 @@
         android:id="@+id/action_playlistFragment_to_createPlaylistFragment"
         app:destination="@id/createPlaylistFragment" />
 </navigation>
+
