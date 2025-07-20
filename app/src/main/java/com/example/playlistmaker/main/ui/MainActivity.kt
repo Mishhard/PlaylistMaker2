@@ -31,6 +31,8 @@ class MainActivity : BaseActivity() {
         val navController = navHost.navController
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        val separator = findViewById<View>(R.id.separator)
+
         bottomNav.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
@@ -38,10 +40,12 @@ class MainActivity : BaseActivity() {
                 R.id.createPlaylistFragment
             )
 
-            bottomNav.visibility = if (destination.id in hideBottomNavFragments) {
-                View.GONE
+            if (destination.id in hideBottomNavFragments) {
+                bottomNav.visibility = View.GONE
+                separator.visibility = View.GONE
             } else {
-                View.VISIBLE
+                bottomNav.visibility = View.VISIBLE
+                separator.visibility = View.VISIBLE
             }
         }
 

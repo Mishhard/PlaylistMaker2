@@ -10,14 +10,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.library.data.dto.PlaylistDto
+import com.example.playlistmaker.library.domain.models.Playlist
 import com.example.playlistmaker.utils.dpToPx
 
-class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
+class PlaylistAdapter(
+    private val onPlaylistClick: (Playlist) -> Unit
+) : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>() {
 
-    private var items: List<PlaylistDto> = emptyList()
+    private var items: List<Playlist> = emptyList()
 
-    fun submitList(newItems: List<PlaylistDto>) {
+    fun submitList(newItems: List<Playlist>) {
         items = newItems
         notifyDataSetChanged()
     }
@@ -29,7 +31,11 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(items[position])
+        val playlist = items[position]
+        holder.bind(playlist)
+        holder.itemView.setOnClickListener {
+            onPlaylistClick(playlist)
+        }
     }
 
     override fun getItemCount(): Int = items.size
@@ -39,7 +45,7 @@ class PlaylistAdapter : RecyclerView.Adapter<PlaylistAdapter.PlaylistViewHolder>
         private val name = itemView.findViewById<TextView>(R.id.playlistName)
         private val count = itemView.findViewById<TextView>(R.id.trackCount)
 
-        fun bind(playlist: PlaylistDto) {
+        fun bind(playlist: Playlist) {
             name.text = playlist.name
 
             val res = itemView.context.resources

@@ -1,6 +1,7 @@
 package com.example.playlistmaker.library.data
 
 import com.example.playlistmaker.library.data.converters.TrackDbConverter
+import com.example.playlistmaker.library.data.db.dao.FavoriteTrackDao
 import com.example.playlistmaker.library.data.db.dao.TrackDao
 import com.example.playlistmaker.player.domain.models.Track
 import com.example.playlistmaker.library.domain.db.FavoriteTracksRepository
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class FavoriteTracksRepositoryImpl(
-    private val dao: TrackDao,
+    private val dao: FavoriteTrackDao,
     private val converter: TrackDbConverter
 ) : FavoriteTracksRepository {
 

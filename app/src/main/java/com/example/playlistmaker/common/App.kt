@@ -23,6 +23,8 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
+
         sharedPrefs = getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)
 
         startKoin {
@@ -47,5 +49,10 @@ class App : Application() {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+
+    companion object {
+        lateinit var instance: App
+            private set
     }
 }

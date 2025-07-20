@@ -18,9 +18,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.BaseActivity
-import com.example.playlistmaker.library.data.dto.PlaylistDto
 import com.example.playlistmaker.player.ui.models.TrackUiModel
 import com.example.playlistmaker.common.BottomSheetPlaylistsAdapter
+import com.example.playlistmaker.library.domain.models.Playlist
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import com.example.playlistmaker.main.ui.MainActivity
@@ -48,13 +48,17 @@ class PlayerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
 
-        val uiModel: TrackUiModel? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("track", TrackUiModel::class.java)
+        val track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(EXTRA_TRACK, TrackUiModel::class.java)
         } else {
             @Suppress("DEPRECATION")
-            intent.getParcelableExtra<TrackUiModel>("track")
+            intent.getParcelableExtra<TrackUiModel>(EXTRA_TRACK)
         }
-        val track = uiModel?.toDomain() ?: return
+
+        if (track == null) {
+            finish()
+            return
+        }
 
         ivCover = findViewById(R.id.track_cover)
         ivPlay = findViewById(R.id.play)
@@ -91,17 +95,18 @@ class PlayerActivity : BaseActivity() {
 
         Glide.with(this)
             .load(track.getFullCover())
-            .transform(RoundedCorners(8.dpToPx(this))
-            )
+            .transform(RoundedCorners(8.dpToPx(this)))
             .placeholder(R.drawable.track_placeholder)
             .into(ivCover)
 
-        findViewById<TextView>(R.id.track_name).text = track.trackName
-        findViewById<TextView>(R.id.artist_name).text = track.artistName
-        findViewById<TextView>(R.id.duration_value).text = track.getFormattedTime()
+        val trackNameView = findViewById<TextView>(R.id.track_name)
+        val artistNameView = findViewById<TextView>(R.id.artist_name)
+
+        trackNameView.text = track.trackName
+        artistNameView.text = track.artistName
+
         findViewById<TextView>(R.id.year_value).text = track.getReleaseYear()
-        findViewById<TextView>(R.id.genre_value).text = track.primaryGenreName
-        findViewById<TextView>(R.id.country_value).text = track.country
+        findViewById<TextView>(R.id.duration_value).text = track.getFormattedTime()
 
         tvTimer.text = track.getFormattedTime()
 
@@ -112,7 +117,8 @@ class PlayerActivity : BaseActivity() {
             findViewById<TextView>(R.id.album_value).visibility = View.GONE
         }
 
-        viewModel.updateCurrentTrack(track)
+        viewModel.updateCurrentTrack(track.toDomain())
+
         viewModel.state.observe(this) { st ->
             when (st) {
                 is PlayerState.Liked -> ivLike.setImageResource(R.drawable.like_active)
@@ -139,6 +145,7 @@ class PlayerActivity : BaseActivity() {
         }
         ivLike.setOnClickListener { viewModel.toggleFavorite() }
         ivBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+
         viewModel.prepare(track.previewUrl)
 
         playlistsAdapter = BottomSheetPlaylistsAdapter { playlist ->
@@ -164,6 +171,7 @@ class PlayerActivity : BaseActivity() {
 
 
 
+
         findViewById<ImageView>(R.id.add_button).setOnClickListener {
             viewModel.loadPlaylists()
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
@@ -179,7 +187,7 @@ class PlayerActivity : BaseActivity() {
     private fun formatTime(ms: Int): String =
         String.format("%02d:%02d", ms / 60000, (ms / 1000) % 60)
 
-    private fun addTrackToPlaylist(playlist: PlaylistDto) {
+    private fun addTrackToPlaylist(playlist: Playlist) {
         viewModel.addTrackToPlaylist(playlist) { added ->
             val message = if (added) {
                 getString(R.string.added_to_playlist, playlist.name)

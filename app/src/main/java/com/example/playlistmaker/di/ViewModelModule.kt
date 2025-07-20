@@ -5,6 +5,7 @@ import com.example.playlistmaker.player.ui.PlayerViewModel
 import com.example.playlistmaker.settings.ui.SettingsViewModel
 import com.example.playlistmaker.library.ui.PlaylistsViewModel
 import com.example.playlistmaker.library.ui.CreatePlaylistViewModel
+import com.example.playlistmaker.library.ui.PlaylistDetailsViewModel
 import com.example.playlistmaker.player.domain.db.FavoriteTracksViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -47,7 +48,11 @@ val viewModelModule = module {
 
     viewModel {
         CreatePlaylistViewModel(
-            repository = get()
+            interactor = get()
         )
+    }
+
+    viewModel {
+        PlaylistDetailsViewModel(get())
     }
 }

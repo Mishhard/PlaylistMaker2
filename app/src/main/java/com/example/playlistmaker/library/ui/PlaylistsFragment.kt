@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.PlaylistAdapter
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.example.playlistmaker.library.data.dto.PlaylistDto
+import com.example.playlistmaker.library.domain.models.Playlist
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -40,19 +40,23 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = PlaylistAdapter()
+        adapter = PlaylistAdapter { playlist ->
+            val bundle = bundleOf(PlaylistFragment.ARG_PLAYLIST_ID to playlist.id)
+            findNavController().navigate(
+                R.id.action_mediaLibraryFragment_to_playlistFragment,
+                bundle
+            )
+        }
         binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvPlaylists.adapter = adapter
 
         binding.newPlaylistButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_mediaLibraryFragment_to_createPlaylistFragment,
-                bundleOf("source" to "library")
-            )
+            findNavController().navigate(R.id.action_mediaLibraryFragment_to_createPlaylistFragment)
+
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.playlists.collectLatest { playlists: List<PlaylistDto> ->
+            viewModel.playlists.collectLatest { playlists: List<Playlist> ->
                 if (playlists.isEmpty()) {
                     binding.emptyPlaceholder.visibility = View.VISIBLE
                     binding.rvPlaylists.visibility = View.GONE

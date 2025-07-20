@@ -12,12 +12,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.library.data.dto.PlaylistDto
+import com.example.playlistmaker.library.domain.models.Playlist
 import com.example.playlistmaker.utils.dpToPx
 
 class BottomSheetPlaylistsAdapter(
-    private val onClick: (PlaylistDto) -> Unit
-) : ListAdapter<PlaylistDto, BottomSheetPlaylistsAdapter.PlaylistViewHolder>(DiffCallback()) {
+    private val onClick: (Playlist) -> Unit
+) : ListAdapter<Playlist, BottomSheetPlaylistsAdapter.PlaylistViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -34,7 +34,7 @@ class BottomSheetPlaylistsAdapter(
         private val name: TextView = itemView.findViewById(R.id.playlistName)
         private val count: TextView = itemView.findViewById(R.id.trackCount)
 
-        fun bind(playlist: PlaylistDto) {
+        fun bind(playlist: Playlist) {
             name.text = playlist.name
             val resources = itemView.resources
             count.text = resources.getQuantityString(
@@ -52,8 +52,8 @@ class BottomSheetPlaylistsAdapter(
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<PlaylistDto>() {
-        override fun areItemsTheSame(oldItem: PlaylistDto, newItem: PlaylistDto) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: PlaylistDto, newItem: PlaylistDto) = oldItem == newItem
+    class DiffCallback : DiffUtil.ItemCallback<Playlist>() {
+        override fun areItemsTheSame(oldItem: Playlist, newItem: Playlist) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Playlist, newItem: Playlist) = oldItem == newItem
     }
 }

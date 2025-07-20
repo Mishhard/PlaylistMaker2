@@ -2,6 +2,7 @@ package com.example.playlistmaker.library.data.db.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.playlistmaker.player.ui.models.TrackUiModel
 
 @Entity(tableName = "favorite_tracks")
 data class FavoriteTrackEntity(
@@ -16,3 +17,19 @@ data class FavoriteTrackEntity(
     val country: String,
     val previewUrl: String
 )
+
+fun FavoriteTrackEntity.toUiModel(): TrackUiModel {
+    return TrackUiModel(
+        trackId = trackId,
+        trackName = trackName,
+        artistName = artistName,
+        trackTimeMillis = trackTimeMillis,
+        artworkUrl100 = artworkUrl100,
+        collectionName = collectionName,
+        releaseDate = releaseDate,
+        primaryGenreName = primaryGenreName,
+        country = country,
+        previewUrl = previewUrl,
+        isFavorite = true
+    )
+}

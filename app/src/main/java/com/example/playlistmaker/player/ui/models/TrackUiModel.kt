@@ -17,8 +17,8 @@ data class TrackUiModel(
     val country: String,
     val previewUrl: String,
     val isFavorite: Boolean
-
 ) : Parcelable {
+
     fun toDomain(): DomainTrack = DomainTrack(
         trackName, artistName, trackTimeMillis,
         artworkUrl100, trackId, collectionName,
@@ -30,6 +30,18 @@ data class TrackUiModel(
         val minutes = (trackTimeMillis ?: 0L) / 1000 / 60
         val seconds = (trackTimeMillis ?: 0L) / 1000 % 60
         return String.format("%d:%02d", minutes, seconds)
+    }
+
+    fun getReleaseYear(): String {
+        return try {
+            releaseDate.take(4)
+        } catch (e: Exception) {
+            "-"
+        }
+    }
+
+    fun getFullCover(): String {
+        return artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
     }
 
     companion object {
