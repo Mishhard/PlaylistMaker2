@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.common.PlaylistAdapter
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.example.playlistmaker.library.data.dto.PlaylistDto
+import com.example.playlistmaker.library.domain.models.Playlist
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -56,7 +56,7 @@ class PlaylistsFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.playlists.collectLatest { playlists: List<PlaylistDto> ->
+            viewModel.playlists.collectLatest { playlists: List<Playlist> ->
                 if (playlists.isEmpty()) {
                     binding.emptyPlaceholder.visibility = View.VISIBLE
                     binding.rvPlaylists.visibility = View.GONE

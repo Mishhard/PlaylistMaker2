@@ -4,16 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.library.data.dto.PlaylistDto
 import com.example.playlistmaker.library.domain.api.PlaylistInteractor
 import com.example.playlistmaker.library.domain.db.FavoriteTracksRepository
+import com.example.playlistmaker.library.domain.models.Playlist
 import com.example.playlistmaker.player.domain.api.PlayerInteractor
 import com.example.playlistmaker.player.domain.models.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import com.example.playlistmaker.player.ui.models.TrackUiModel
 
 class PlayerViewModel(
     private val interactor: PlayerInteractor,
@@ -104,8 +103,8 @@ class PlayerViewModel(
 
     fun isPlaying(): Boolean = interactor.isPlaying()
 
-    private val _playlists = MutableLiveData<List<PlaylistDto>>()
-    val playlists: LiveData<List<PlaylistDto>> = _playlists
+    private val _playlists = MutableLiveData<List<Playlist>>()
+    val playlists: LiveData<List<Playlist>> = _playlists
 
     fun loadPlaylists() {
         viewModelScope.launch {
@@ -115,7 +114,7 @@ class PlayerViewModel(
         }
     }
 
-    fun addTrackToPlaylist(playlist: PlaylistDto, onResult: (Boolean) -> Unit) {
+    fun addTrackToPlaylist(playlist: Playlist, onResult: (Boolean) -> Unit) {
         val track = currentTrack ?: return
         viewModelScope.launch {
             val added = playlistInteractor.addTrackToPlaylist(track, playlist)

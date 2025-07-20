@@ -3,14 +3,13 @@ package com.example.playlistmaker.library.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.library.domain.db.PlaylistRepository
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.library.domain.models.Playlist
 import kotlinx.coroutines.launch
-import com.example.playlistmaker.library.data.db.entity.toDomain
+import com.example.playlistmaker.library.domain.api.PlaylistInteractor
 
 
-class CreatePlaylistViewModel(private val repository: PlaylistRepository) : ViewModel() {
+class CreatePlaylistViewModel(private val interactor: PlaylistInteractor) : ViewModel() {
     private val _playlist = MutableLiveData<Playlist>()
     val playlist: LiveData<Playlist> get() = _playlist
 
@@ -20,19 +19,19 @@ class CreatePlaylistViewModel(private val repository: PlaylistRepository) : View
 
     fun loadPlaylist(id: Long) {
         viewModelScope.launch {
-            repository.getPlaylistById(id)?.let { dto ->
-                _playlist.postValue(dto.toDomain())
+            interactor.getPlaylistById(id)?.let { playlist ->
+                _playlist.postValue(playlist)
             }
         }
     }
 
     fun createPlaylist(name: String, description: String?, imagePath: String?) {
-        viewModelScope.launch { repository.createPlaylist(name, description, imagePath) }
+        viewModelScope.launch { interactor.createPlaylist(name, description, imagePath) }
     }
 
     fun updatePlaylist(id: Long, name: String, description: String?, imagePath: String?) {
         viewModelScope.launch {
-            repository.updatePlaylist(id, name, description, imagePath)
+            interactor.updatePlaylist(id, name, description, imagePath)
             _playlistUpdated.postValue(true)
         }
     }

@@ -10,7 +10,6 @@ import com.example.playlistmaker.common.App
 import com.example.playlistmaker.library.domain.models.Playlist
 import com.example.playlistmaker.player.ui.models.TrackUiModel
 import kotlinx.coroutines.launch
-import com.example.playlistmaker.library.data.dto.toDomain
 import com.example.playlistmaker.utils.SingleLiveEvent
 
 class PlaylistDetailsViewModel(
@@ -29,11 +28,10 @@ class PlaylistDetailsViewModel(
 
     fun loadPlaylist(id: Long) {
         viewModelScope.launch {
-            val dto = playlistInteractor.getPlaylistById(id)
-            val domainPlaylist = dto?.toDomain()
-            _playlist.postValue(domainPlaylist)
+            val playlist = playlistInteractor.getPlaylistById(id)
+            _playlist.postValue(playlist)
 
-            if (domainPlaylist != null) {
+            if (playlist != null) {
                 val loadedTracks = playlistInteractor.getTracksForPlaylist(id)
                 _tracks.postValue(loadedTracks)
             } else {

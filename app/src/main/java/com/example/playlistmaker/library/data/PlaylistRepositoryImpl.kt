@@ -9,6 +9,9 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
 import com.example.playlistmaker.library.data.db.entity.TrackEntity
+import com.example.playlistmaker.library.domain.models.Playlist
+import com.example.playlistmaker.library.data.db.entity.toDomain
+import kotlinx.coroutines.flow.map
 
 class PlaylistRepositoryImpl(
     private val playlistDao: PlaylistDao,
@@ -28,10 +31,6 @@ class PlaylistRepositoryImpl(
             trackCount = 0
         )
         playlistDao.insert(playlist)
-    }
-
-    override fun getPlaylists(): Flow<List<PlaylistEntity>> {
-        return playlistDao.getAllPlaylists()
     }
 
     override suspend fun addTrackToPlaylist(track: Track, playlistId: Long): Boolean {
@@ -72,9 +71,15 @@ class PlaylistRepositoryImpl(
         return true
     }
 
-    override suspend fun getPlaylistById(id: Long): PlaylistEntity? {
-        return playlistDao.getPlaylistById(id)
+    override fun getPlaylists(): Flow<List<Playlist>> {
+        return playlistDao.getAllPlaylists()
+            .map { entities -> entities.map { it.toDomain() } }
     }
+
+    override suspend fun getPlaylistById(id: Long): Playlist? {
+        return playlistDao.getPlaylistById(id)?.toDomain()
+    }
+
 
     override suspend fun deletePlaylist(id: Long) {
         playlistDao.deletePlaylist(id)

@@ -48,7 +48,7 @@ val viewModelModule = module {
 
     viewModel {
         CreatePlaylistViewModel(
-            repository = get()
+            interactor = get()
         )
     }
 
