@@ -149,4 +149,7 @@
         <item name="android:backgroundTintMode">src_over</item>
     </style>
 
+    <style name="DialogButtonStyle">
+        <item name="android:textColor">@color/search_light_blue</item>
+    </style>
 </resources>

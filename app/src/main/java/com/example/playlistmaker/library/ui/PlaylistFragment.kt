@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -22,6 +21,7 @@ import com.example.playlistmaker.player.ui.PlayerActivity
 import com.example.playlistmaker.player.ui.models.TrackUiModel
 import com.example.playlistmaker.utils.dpToPx
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistFragment : Fragment() {
@@ -177,7 +177,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun confirmDeletePlaylist() {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
             .setTitle(R.string.delete_playlist)
             .setMessage(R.string.delete_playlist_confirm)
             .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.dismiss() }
@@ -230,7 +230,7 @@ class PlaylistFragment : Fragment() {
     }
 
     private fun showDeleteTrackDialog(track: TrackUiModel) {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.CustomDialogTheme)
             .setTitle(R.string.delete_track_title)
             .setNegativeButton(R.string.no) { dialog, _ -> dialog.dismiss() }
             .setPositiveButton(R.string.yes) { _, _ ->
