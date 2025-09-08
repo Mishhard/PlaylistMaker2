@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mediaLibraryFragment">
+
+    <fragment
+        android:id="@+id/mediaLibraryFragment"
+        android:name="com.example.playlistmaker.library.ui.MediaLibraryFragment"
+        android:label="@string/media_library">
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_createPlaylistFragment"
+            app:destination="@id/createPlaylistFragment" />
+        <action
+            android:id="@+id/action_mediaLibraryFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/createPlaylistFragment"
+        android:name="com.example.playlistmaker.library.ui.CreatePlaylistFragment"
+        android:label="@string/new_playlist" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.playlistmaker.search.ui.SearchFragment"
+        android:label="@string/search" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.playlistmaker.settings.ui.SettingsFragment"
+        android:label="@string/settings" />
+
+    <activity
+        android:id="@+id/playerFragment"
+        android:name="com.example.playlistmaker.player.ui.PlayerActivity"
+        android:label="@string/player">
+    </activity>
+
+    <fragment
+        android:id="@+id/playlistsFragment"
+        android:name="com.example.playlistmaker.library.ui.PlaylistsFragment">
+
+        <action
+            android:id="@+id/action_playlistsFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.example.playlistmaker.library.ui.PlaylistFragment"/>
+    <action
+        android:id="@+id/action_playlistFragment_to_createPlaylistFragment"
+        app:destination="@id/createPlaylistFragment" />
+</navigation>
+

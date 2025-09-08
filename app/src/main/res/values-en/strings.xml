@@ -1,4 +1,12 @@
 <resources>
+    <plurals name="track_count">
+        <item quantity="one">%d track</item>
+        <item quantity="other">%d tracks</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
     <string name="app_name">Playlist Maker</string>
     <string name="search">Search</string>
     <string name="media_library">Library</string>
@@ -8,5 +16,45 @@
     <string name="support">Support</string>
     <string name="user_terms">User terms</string>
     <string name="clear_search_request">Clear</string>
-
+    <string name="nothing_found">Nothing found</string>
+    <string name="connection_problem">Communication problems/n/nThe download failed. Check your internet connection</string>
+    <string name="retry">Retry</string>
+    <string name="clear_history">Clear history</string>
+    <string name="you_searched">You searched</string>
+    <string name="Country">Country</string>
+    <string name="Genre">Genre</string>
+    <string name="Year">Year</string>
+    <string name="Album">Album</string>
+    <string name="Duration">Duration</string>
+    <string name="new_playlist">New playlist</string>
+    <string name="your_media_library_is_empty">Your media library is empty</string>
+    <string name="you_have_not_created_any_playlists">You have not created any playlists</string>
+    <string name="player">Player</string>
+    <string name="there_are_no_favorite_tracks">There are no favorite tracks</string>
+    <string name="playlist_title">Title*</string>
+    <string name="playlist_description">Description</string>
+    <string name="create">Create</string>
+    <string name="add_to_playlist">Add to playlist</string>
+    <string name="added_to_playlist">Added to playlist %1$s</string>
+    <string name="track_already_in_playlist">Track already in playlist %1$s</string>
+    <string name="playlist_created">Playlist %1$s has been created</string>
+    <string name="dialog_exit_title">Finish creating a playlist?</string>
+    <string name="dialog_exit_message">All unsaved data will be lost</string>
+    <string name="dialog_exit_negative">Cansel</string>
+    <string name="dialog_exit_positive">Finish</string>
+    <string name="no_tracks_message">There are no tracks in this playlist</string>
+    <string name="share">Share</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="delete_playlist">Delete playlist</string>
+    <string name="delete_playlist_confirm">Do you want to delete the playlist?</string>
+    <string name="cancel">Cancel</string>
+    <string name="empty_playlist_error">You have not created any playlists</string>
+    <string name="playlist">"Playlist %1$s"</string>
+    <string name="save">Save</string>
+    <string name="favorites_tracks">Favorite tracks</string>
+    <string name="playlists">Playlists</string>
+    <string name="delete_track_title">Do you want to delete the track?</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
 </resources>

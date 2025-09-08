@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal">
+
+    <Button
+        android:id="@+id/newPlaylistButton"
+        style="@style/SearchButtonStyle"
+        android:text="@string/new_playlist"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="12dp"/>
+
+    <LinearLayout
+        android:id="@+id/emptyPlaceholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/placeholderImage"
+            android:layout_width="@dimen/search_placeholder_size"
+            android:layout_height="@dimen/search_placeholder_size"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/track_nothing_found" />
+
+        <TextView
+            android:id="@+id/placeholderMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ys_display_medium"
+            android:gravity="center"
+            android:text="@string/you_have_not_created_any_playlists"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPlaylists"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+</LinearLayout>
